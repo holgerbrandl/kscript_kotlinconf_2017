@@ -1,0 +1,1037 @@
+---
+title: "`kscript`"
+subtitle: "Scripting Enhancements for Kotlin"
+author: "Holger Brandl"
+date: "3.11.2017  -  KotlinConf2017"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["default", "fonts", "my-theme.css"]
+    chakra: "libs/remark-latest.min.js"
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+background-image: url(images/official_cover.jpg)
+background-position: center
+background-repeat: no-repeat
+background-size: 100%
+
+
+---
+
+class: middle, inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+require(methods)
+```
+
+
+<!-- ## Outline -->
+
+## What are language requirements for data-driven science?
+
+## Why Kotlin may be the right choice.
+
+## How `kscript` provides enhanced scripting support for Kotlin.
+
+???
+
+part 1: my background, data scientiest/analyst working with various kinds of data. lessons I've learned.
+
+* Software examples from academia
+* Shortcomings of existing languages
+* What works and what did not
+
+part 2: argue that kotlin might . short because assumed that audience knowns kotlin. what's missing  yet
+
+
+* botoom line: ombination of simplified language & very good dependency model/tooling
+
+part 3: main part. obviously. how `kscript`, feature walkthroguh and examples.
+
+
+* `kscript` Scripting enhancements Kotlin
+* How kotlin helps
+* What's missing and what we can do about it
+
+
+---
+# Language requirements for data-driven science
+
+
+### 1. Reproducible: Can we reproduce findings at a later date?
+
+### 2. Rapid Prototyping: Can we quickly run an analysis?
+
+### 3. Scalable: Can we scale simple protocols into more complex systems?
+
+### 4. Community: Can we enable colleagues to analyze data?
+
+
+???
+
+tbd what science are we talking about here?
+
+just technical, not what method etc as in https://www.kdnuggets.com/2016/08/core-data-science.html
+
+walk through most common candidates when java, python, R, bit of bash
+
+performance left out --> just a linear factor anyway. hard to to a non-biased comparision
+
+---
+background-image: url(images/0d638038_whiteend.jpg)
+background-position: center
+background-repeat: no-repeat
+background-size: 100%
+
+# Java for data-science?
+
+2001: First contact java
+
+
+<!-- .image-50[![](images/0d638038.png)] -->
+
+Evolving image processing for 2d gel electrophoresis analysis
+
+--
+
+likes
+* Static typing providing guidance and context
+* Type-time checking of code thanks to IDEs
+* Deployment of an product
+* Java dependency trees rock!
+
+--
+
+dislikes
+* Prototyping happend in the debugger
+* Rerun apps again and again
+* lack of interactivity
+
+???
+
+--
+
+### Java allows to write complex software but fails for explorative analysis and prototyping.
+
+
+???
+
+tag line: core of data-science, isn't it!!
+
+* Did not know about REPL (python R, but experience felt flawed already
+
+java first, guess most audience have java background.
+
+Actually... first programming language after toying around with c while being in high-school
+
+First API: JAI, quit a nut to crack
+Very explorative --> prototyping
+
+bottom line: great language, still love it.
+
+<!-- .image-50[![](images/fdc07197.png)] -->
+Dependencies:
+Well formed tree with specific versions
+Developer decides how to resolve versions conflicts
+
+worked with java a lot since, dependncy manageent always amazed me
+
+every dependency is specific about sub-depndency. No doubt how to assemble a system
+
+tree conflicts, by pulling
+
+
+---
+# Java for data-science
+
+
+### 1. Reproducible: Can we reproduce findings at a later date? ![](check.png)
+
+### 2. Rapid Prototyping: Can we quickly do setup an analysis?            ![](fail.png)
+
+### 3. Scalable: Can we scale simple protocols into more complex systems? ![](check.png)
+
+### 4. Learning curve: Can we enable colleagues to analyze data?            ![](fail.png)
+
+
+???
+Great because
+1. Rock-solid dependency model
+2. standardized deployment path
+3. Scalabilty to build complex systems
+
+They don't scale because of static typing.
+
+Not so great
+* Language complexity and readability
+* Missing REPL & scriptability
+
+
+repl started in j9. but overal languge evolution very slow.
+
+
+---
+# Python and R for data-driven sciense?
+
+
+Most common.
+
+R stronger for statistics and explorative data-analysis (dplyr, tidyr, rstudio).
+
+Python more popular for machine learning (i.e. kaggle, keras)
+
+Both are fun to teach and great for prototyping.
+
+
+???
+
+todo pics here!
+
+---
+# Python dependencies
+
+`pip install --user somtehing` mostly works these days, but
+* No binaries, always (slowly) compiles from scratch
+* Per project index only via `virtualenv`, which is tedious for small scale tasks:
+
+```{r, engine='bash', eval=FALSE}
+virtualenv my_scikit
+
+## activate
+source my_scikit/bin/activate
+
+pip install -U scikit-learn
+
+## do something "quick" with
+/sw/bin/python -c '
+from sklearn import datasets
+...
+'
+
+## get rid of it
+deactivate
+```
+
+### no sound way to manage dependencies in python
+
+.footnote[[Why I hate virtualenv and pip](https://pythonrants.wordpress.com/2013/12/06/why-i-hate-virtualenv-and-pip/)]
+
+???
+
+I've tried.
+
+Shed light on most crticial feature: Reproducitbilitgy.
+
+But there's `virtualenv`/`pip`?!
+
+Did not say impossible but lacks convenience and fault tolearnce
+
+Often just scriplet are just about 10 lines, more overhead than usercode.
+
+https://packaging.python.org/discussions/pip-vs-easy-install/
+
+"
+
+
+---
+# R dependencies
+
+1. No built-in way to indicate a specific version for a project
+
+
+* [packrat](https://github.com/rstudio/packrat) - build package index from scratch for each
+
+
+2. Also package-depdencies sloppy by design
+
+```
+Imports: assertthat, bindrcpp (>= 0.2), glue (>= 1.1.1), magrittr,
+        methods, pkgconfig, rlang (>= 0.1.2), R6, Rcpp (>= 0.12.7),
+        tibble (>= 1.3.1), utils
+```
+
+
+???
+
+
+from http://127.0.0.1:30576/library/dplyr/DESCRIPTION
+
+
+---
+# Python and R are not yet the right tool for data science
+
+
+### 1. Reproducible: Can we reproduce findings at a later date? ![](fail.png)
+
+### 2. Rapid Prototyping: Can we quickly do setup an analysis?            ![](check.png)
+
+### 3. Scalable: Can we scale simple protocols into more complex systems? ![](fail.png)
+
+### 4. Learning curve: Can we enable colleagues to analyze data?            ![](fail.png)
+
+
+
+???
+
+How are `R` and `python` fail in the data science process?
+
+Do not scale to more complex systems
+and fail to provide a proper dependency tooling
+
+
+1. No rock-solid dependency model
+2. No standardized deployment path
+3. Missing scalabilty to build complex systems
+
+Don't get me wrong, they are
+* Great for protoyping
+* easy to get started with
+* Amazing level of interactivity
+
+
+Users reimplement prototype often in python but reimplement for speed and
+
+That's why python does extremly well. Not because it's excellent in all recards. Su
+
+Polls are biass, but kd-nuggest community poll: Surpassed R in popuarlatiy for data-science.
+
+
+
+---
+# Stick to the basics data-driven science?
+
+> But it's faster and way shorter to do it bash! (colleagues)
+
+Do _magical_ thing in the terminal
+```bash
+removeMultiMappers(){
+perl -ne 'unless( ( !( $_=~/^@.*/ ) && !(m/AS:i:/ ) ) || ( m/AS:i:(\S+).+XS:i:(\S+)/ && $1-$2<1  ) ){ print;}' 
+}
+```
+
+> Marta Florio, Mareike Albert, Elena Taverna, Takashi Namba, **Holger Brandl**, Eric Lewitus, Christiane Haffner, Alex Sykes, Fong Kuan Wong, Jula Peters, E. Guhr, Sylvia Klemroth, Kay Prüfer, Janet Kelso, Ronald Naumann, Ina Nüsslein, Andreas Dahl, Robert Lachmann, Svante Pääbo, Wieland B. Huttner
+  **Human-specific gene ARHGAP11B promotes basal progenitor amplification and neocortex expansion.**
+  *Science* , 347(6229) 1465-1470 (2015)
+
+Get published and forget.
+
+
+Lesson learned: Don't stop when it *just* works. Don't use awkward methods to avoid an actual implementation.
+
+Not even truly portable. Does not scale, Unteachable black art.
+
+`kscript` started of as a `bash` script until it hit a manageabilituy barrier at around ~500 polyglot (i.e. messy) lines.
+
+**TODO** move kscript example to kscript section
+
+???
+
+hellfire A: fire & forget
+
+
+Don't get me wrong: the linux shell is great. often see bloated apis, why? it's faster and way shorter to do it bash
+Great frameworks like csv
+
+but
+
+---
+# Stick to the basics to allow for proper tool integration?
+
+
+Easy to to polyglot programming.
+
+Enable integration
+
+The linux shell just rocks
+
+```bash
+zcat seq_dasta.fastq.gz  | \
+awk '{sub(/[ \t]*$/, "");print}' | \
+python -c '
+from Bio import SeqIO
+import sys
+
+for record in SeqIO.parse(sys.stdin, "fastq"):
+  if (record.description.split(" ")[1].startswith("1:")) : print record.description
+' | \
+gzip -c > processed_data.gz
+```
+
+
+`R` and `python` integrate nicely with `bash` *without* having any additional scripts floating around
+```bash
+cat iris.csv | \
+    Rscript --vanilla -e 'read.csv(file("stdin")) %>% dplyr::filter(Species=="setosa") %>% write.table(stdout()) ' | \
+    cut -f-1,3 > setosa.txt
+```
+
+Often best way if specialized tools get involved.
+
+Pick the best from all worlds? Sure, but in a solid way avoid ugle dependencies.
+
+???
+
+Especiall in science not everythone is working with services all day, but we stick existing cutting-edge tools to build workflows.
+
+rocks ... screen, coloring, pipes.
+
+
+
+---
+# Deploy software for data-driven science
+
+Webservices don't scale with data. Bring tools to users.
+
+
+> Raphael Etournay, Marko Popović, Matthias Merkel, Amitabha Nandi, Corinna Blasse, Benoit Aigouy, Holger Brandl, Gene Myers, Guillaume Salbreux, Frank Jülicher, Suzanne Eaton  
+  **Interplay of cell dynamics and epithelial tension during morphogenesis of the Drosophila pupal wing.**  
+  *Elife* , 4 Art. No. e07090 (2015)
+
+embed movie here
+
+![](9b__blue_square_tracking.mp4)
+
+
+???
+
+Great projct. one of my all-time favorites.
+
+---
+class: inverse
+
+background-image: url(images/927721c9.png)
+background-position: center
+background-repeat: no-repeat
+background-size: 110%
+
+# How to give it to the community? Dockerize it!?
+
+
+---
+background-image: url(images/927721c9_white.jpg)
+background-position: center
+background-size: 110%
+
+## Tried it! ![](fail.png)
+
+--
+
+## Sucessfully published! ![](fail.png)
+
+Raphael Etournay, Matthias Merkel, Marko Popović, **Holger Brandl**, Natalie Dye, Benoit Aigouy, Guillaume Salbreux, Suzanne Eaton, Frank Jülicher
+  **TissueMiner: a multiscale analysis toolkit to quantify how cellular processes create tissue dynamics.**
+  *Elife* , 5 Art. No. e14334 (2016)
+
+
+https://github.com/mpicbg-scicomp/tissue_miner
+
+--
+
+```bash
+alias tm='docker run --rm -ti -v $(dirname $PWD):/movies etournay/tissue_miner'
+    
+tm analyze_sheer <image_data>
+tm track_cell_divisions <image_data>
+```
+
+--
+
+## Doing just docker-support since then. ![](fail.png)
+
+???
+
+ Issues when shipping apps as executable containers
+
+* Harder to communicate (especially to less experienced users)
+* Harder to handle, i.e. ¡lack convenience of a true tool
+* Quit some devops overhead just to keep it up and running
+
+
+What do we learn:
+> Bundling tools as containers not yet the way to go. More lightweight solution seem better.
+
+Depends on environment. Academia environment, even if most colleuges hoave some phd, mostly not in computer science, but bio, chemistry. still interested. Also students, less techy staff--> harder & more support efforts
+
+docker is great. use it almost daily.
+
+Adds complexity layers that lacks ease of prototyping
+
+can you send a script. can you send me 5gb container.
+
+More an expert thing
+
+Bottom Line: Scientist don't do web-serivces, the "just" write software. Difference between science & product devlopmen t.
+
+---
+# State of art in data-driven science
+
+Reproducible, Dependencies & Scalbilty: Java
+
+Protyping & Community: **R & Python**
+
+
+What's needed for scientic software development?
+#####  Java with the ease of a scripting language
+
+
+???
+r&python mostly, java few,
+
+would provide magic 4: Reproducible, Rapid Prototyping, Scalable, Community
+
+
+
+
+Prototype today using something convenient such as python
+* python
+* R
+
+Integrate workflows via the shell.
+
+Reimplement later in a more production-ready language like
+* java
+* c++
+
+
+---
+## Egg-laying wool-milk-sow?
+
+
+.image-50[![](images/7d17d6d4.png)]
+
+
+.footnote[From german _Eierlegende Wollmichau_]
+
+???
+
+Asking too much?
+
+
+---
+
+--
+# End 2015: First `kotlin` encounter!
+
+## Nice Syntax.
+
+--
+
+## Uhhhh, still beta!
+
+--
+
+## Go back to work.
+
+
+
+---
+# February 2016
+
+Kotlin v1.0.
+
+* type inference
+* extension function
+* data classes
+* dsls in mind
+* scripting = prototyping
+* all in a jvm context with nice dependencies
+
+
+**TODO** simley here!
+
+Ready for reproducible analysis, Rapid Prototyping, proper dependeny model, Community
+
+???
+release day 15.2.
+
+
+---
+
+```bash
+kotlinc -script pipeline_prototype.kts
+```
+
+which means
+```kotlin
+#!/usr/bin/env kotlinc -script
+
+println("do stuff")
+```
+Also works. :-)
+
+* But how to pull in dependencies? `kotlin -cp ...` seemed too tedious
+* Also since eval means recompile, it felt a bit slow
+* How to keep track of required JVM options
+
+```
+kotlin -cp ?? 
+```
+
+???
+15.2.
+
+shebang did not work out
+
+---
+class: inverse
+
+
+![](images/kscript_repo.png)
+
+Since March 2016
+
+Enhanced scripting support for [Kotlin](https://kotlinlang.org/) on *nix-based systems.
+
+> `kscript` provides an easy-to-use, very flexible, and almost zero-overhead solution to write self-contained mini-applications with Kotlin.
+
+???
+
+Kotlin has some built-in support for scripting already but it is not yet feature-rich enough to be a viable alternative in the shell.
+
+
+---
+## Core features of `kscript`
+
+In particular this wrapper around `kotlinc` adds
+* Compiled script caching (using md5 checksums)
+* Dependency declarations using gradle-style resource locators and automatic dependency resolution with maven
+* More options to provide scripts including interpreter mode, reading from stdin, local files or URLs
+* Embedded configuration for Kotlin runtime options
+* Support library to ease the writing of Kotlin scriptlets
+
+???
+
+Taken all these features together, `kscript` provides an easy-to-use, very flexible, and almost zero-overhead solution to write self-contained mini-applications with Kotlin.
+
+---
+
+```{r, engine='bash', eval=TRUE}
+# sdk install kscript
+kscript --help
+```
+
+---
+## Input modes
+
+There's a multitude of ways to serve a script to `kscript`
+
+The `<script>` can be a
+- script file (*kts),
+- a script URL,
+- `-` for stdin,
+- a `*.kt` source file with a main method,
+- some kotlin code
+
+
+---
+## Interpreter Usage
+
+Use `kscript` as interpreter for a script `Example.kts` just point to it in the shebang line
+
+```kotlin
+#!/usr/bin/env kscript
+
+println("hello world")
+```
+
+We can still run it directly with
+```bash
+kscript Example.kts
+```
+Or make executable and run directly
+```bash
+chmod +x Example.kts
+
+./Example.kts
+```
+
+
+---
+## Inlined Usage
+
+Use `kscript` in a workflow without creating an additional script file.
+
+* Directly provide a Kotlin scriptlet as argument
+
+```bash
+kscript 'println("hello world")'
+```
+
+* Pipe a Kotlin snippet into `kscript` and instruct it to read from `stdin` by using `-` as script argument
+
+```bash
+echo '
+println("Hello Kotlin.")
+' |  kscript -
+```
+
+* Use `heredoc` (preferred solution for inlining) which gives more flexibility. E.g. use single quotes in script:
+
+```bash
+kscript - <<"EOF"
+println("It's a beautiful day!")
+EOF
+```
+
+???
+
+also process substitution is also supported
+
+
+---
+## `kscript` can launch apps right from the internet
+
+*  support remote scriplet repositories
+*  allows for easy integration of remotely hosted (mini) programs into data pipelines
+*  URLs are assumed to be static and will be cached via checksum.
+
+Example
+```{r, engine='bash', eval=FALSE}
+kscript 'https://git.io/v9R73' arg u ments
+```
+
+To streamline the usage, the first part could be even aliased:
+
+```bash
+alias hello_kscript="kscript https://git.io/v1cG6"
+hello_kscript my argu ments
+ 
+
+```
+
+---
+## Scale it up with just the standard library
+
+```kotlin
+#!/usr/bin/env kscript
+
+val stdin: Sequence<String> = generateSequence { readLine() }
+
+stdin.map { "test"+it }
+        .filter{ it.contains("^[0-5]{5}".toRegex()) }
+        .forEach { println(it) }
+```
+
+Already a viable alternative to write scripts, but not yet better than `kotlinc -script`
+
+---
+## Cache for speed
+
+`kscript` execution model:
+1. Calculate md5 of input script
+2. Look cached jar by md5
+3. Use process substitution to replace kscript with user process
+
+
+All _kscripts_ are cached based on `md5` checksum, so running the same snippet again will be much faster
+
+The cache directory is `~/.kscript` and can be cleared with `kscript --clear-cache`
+
+
+---
+## Directives
+
+
+> Just a script is not enough to _... write self-contained mini-applications with Kotlin._ (from kscript GH-README)
+
+Directives supported by `kscript`
+* `//DEPS` - Declare dependencies with gradle-style locators
+* `//KOTLIN_OPTS` - Configure the kotlin/java runtime
+* `//INCLUDE` - Include/Source kotlin source files
+* `//ENTRY` - Declare application entrypoint for kotlin `*.kt` applications
+
+
+
+---
+## Declare dependencies with `//DEPS`
+
+
+```kotlin
+#!/usr/bin/env kscript
+
+*//DEPS com.beust:klaxon:0.24, com.github.kittinunf.fuel:fuel:1.3.1
+import com.beust.klaxon.*
+import com.github.kittinunf.fuel.httpGet
+
+require(args.isNotEmpty()) {
+    println("Usage: id_converter <some_id>+")
+    kotlin.system.exitProcess(-1)
+}
+
+val queryURL = "http://foo.com/bar?convert=${args.joinToString(",")}"
+val json = String(queryURL.httpGet().response().second.data)
+val jsonArray = Parser()
+    .parse(json.byteInputStream())!! as JsonArray<*>
+
+// use klaxon library to parse the json result 
+val conversionTable = jsonArray.map { (it as JsonObject) }.map { 
+    it.int("id") to it.string("converted") 
+}.forEach { println(it) }
+```
+Run as tool with just `id_converter.kts 232 42323 23`
+
+
+---
+## Configure the runtime  with `//KOTLIN_OPTS`
+
+Just passed on to `kotlin`.
+
+Example: Filter dna-sequences by length
+
+```kotlin
+#!/usr/bin/env kscript
+
+//DEPS de.mpicbg.scicomp:kutils:0.4
+*//KOTLIN_OPTS -J-Xmx5g -J-server
+ 
+import de.mpicbg.scicomp.bioinfo.openFasta
+
+if (args.size != 2) {
+    System.err.println("Usage: fasta_filter <fasta> <max_length>")
+    kotlin.system.exitProcess(-1)
+}
+
+val fastaFile = java.io.File(args[0])
+val lengthCutoff = args[1].toInt()
+
+openFasta(fastaFile).
+        filter { it.sequence.length >= lengthCutoff }.
+        forEach { print(it.toEntryString()) }
+```
+
+
+---
+## Ease prototyping with `//INCLUDE`
+
+Artifacts are the proper way.
+
+But many other languages allow to directly include source files.
+
+`kscript` allows to skip artifact deployment
+```kotlin
+//INCLUDE utils.kt
+//INCLUDE https://github.com/krangl/blob/src/MathHelpers.kt
+
+println(listOf(1.3, 42.3, 3.).mean())
+```
+???
+
+Again prototyping vs development
+
+
+---
+##  Declare entrypoint for kotlin `*.kt` applications
+
+`kscript` also supports running regular Kotlin `kt` files. Example: `Foo.kt`:
+
+```kotlin
+package examples
+
+//ENTRY examples.Foo
+
+class Foo{
+    companion object {
+        @JvmStatic fun main(args: Array<String>) {
+            println("Foo was called")
+        }
+    }
+}
+
+fun main(args: Array<String>) =  println("main was called")
+```
+
+To run top-level main instead we would use `//ENTRY examples.FooKt`
+
+The latter is the default for `kt` files and could be ommited
+
+
+
+---
+## Enhance your terminal with Kotlin
+
+`kscript` can be used as a speedier and flexible substitute for built-in terminal tools such as `awk` or `sed`
+
+Delete a column
+
+```{r, engine='bash', eval=FALSE}
+awk '!($3="")'  some_flights.tsv
+kscript 'lines.split().select(-3).print()' some_flights.tsv 
+```
+
+
+Delete trailing white space (spaces, tabs)
+```{r, engine='bash', eval=FALSE}
+awk '{sub(/[ \t]*$/, "");print}' file.txt
+kscript 'lines.map { it.trim() }.print()' file.txt
+```
+
+.footnote[For more examples see [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]
+
+
+
+---
+## How to edit a kscriptlet?
+
+Why not language injection in Intellij
+
+<pichere!!>
+
+* Vote for: [KT-13347](https://youtrack.jetbrains.com/issue/KT-13347) Good code is red in injected kotlin language snippets
+* Dependencies might  differ from project dependencies
+
+
+
+---
+## Better: Use temporary project with dependcy resolution
+
+```
+kscript --idea
+```
+
+Creates temporary project using gradle with script dependencies
+
+Requires command-line launcher to be setup via `Tools->Command Line Launcher`
+
+
+
+---
+## KEEP [#75](https://github.com/Kotlin/KEEP/issues/75) Scripting Support
+
+
+.left-column40[
+![](images/9f4540b1.png)
+]
+
+
+.right-column60[
+Great proposal that aims to unify various aspects of scripting in a common API
+
+kscript is growing more organically based on community input.
+
+Kscript mostly overlaps with https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md#standalone-scripting
+
+What `kscript` covers already
+* IDE support via `--idea`
+* Project-level REPL `--interactive`
+* Directives to modulate includes, and dependency and runtime environment
+]
+
+
+
+---
+
+class: inverse, center, middle
+
+# What's next?
+
+---
+## Quo vadis kscript?
+
+- Not much. Don't get infected by _featureritis_
+- Go *kotlin-native* to remove jvm launch overhead
+- Bundle dependency lookup via `keplin-maven-resolver` to avoid `mvn` dependency
+- Pray for [KT-16802](https://youtrack.jetbrains.com/issue/KT-16802) _Good code is always red when editing kts-script files under Kotlin v1.1_ to become fixed
+
+- script-based dsl-support: Derive new interpreters from kscript
+
+```kotlin
+#!/usr/bin/env tornando-fx-script
+
+class HelloWorld : View() {
+    override val root = hbox {
+        label("Hello world")
+    }
+}
+```
+
+- Use annotation-driven script configuration once Scripting API supports them
+- Support for java files?
+
+???
+
+native requires at least some 'java.io.File'-like native API
+
+https://github.com/Kotlin/KEEP/issues/75
+
+https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
+
+
+---
+## Replace `//` directives with annotations
+
+Using proper file annotations would be better design and also allow for better tooling
+
+```kotlin
+// DEPS log4j:log4j:1.2.14
+
+// vs
+
+@file:DependsOn("log4j:log4j:1.2.14")
+```
+
+
+No such thing as `DependsOn` in kotlin stdlib. Custom project artifact dependency declaring those extra annotations would be needed.
+
+Not yet there, but planned as additional feature for more advanced users.
+
+KEEP #75 _Scripting Enhancements_ may change this, `kscript` will support it.
+
+Recently implemented in [kohesive/keplin](https://github.com/kohesive/keplin)**
+and used for `[kotlin-jupyter](https://github.com/ligee/kotlin-jupyter)` kernel, so maybe integrate it from there.
+
+
+???
+
+We would prefer annotations over custom syntax!
+
+... support the moment it goes live.
+
+
+
+---
+## How Kotlin may help to shape a more solid language for data-science?
+
+1. Continue jupyter-kernel support  (interactive usage, but also report rendering using kotlin scripts)
+2. Provide a cut-down version IJ for Kotlin. Newbies are overwhelmed with current builds. Would also help for teaching
+3. More libraries.
+
+???
+long way python and r are miles ahead with the data-sciene libaries.
+
+---
+## Acknowledgements
+
+* inspired by [kotlin-script](https://github.com/andrewoma/kotlin-script)
+* Oscar Gonzales
+* Github Community
+* Scientific Computing Facility @ MPI-CBG
+* Jetbrains
+
+
+???
+
+**TODO** pics here
+
+---
+class: inverse
+
+## Summary
+
+
+### Languages for data-sciene must allow share code between prottypes and products, should quick to get started with, and should allow for rapid prototyping
+
+### Kotlin may be the right choice.
+
+### `kscript` provides enhanced scripting support for Kotlin.
+
+.footnote[
+Questions and pull requests are welcome.
+
+https://github.com/holgerbrandl/kscript
+]
