@@ -6,7 +6,7 @@ date: "3.11.2017  -  KotlinConf2017"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: ["default", "fonts", "my-theme.css"]
+    css: ["default", "fonts", "css/my-theme.css"]
     chakra: "libs/remark-latest.min.js"
     nature:
       ratio: '16:9'
@@ -66,9 +66,9 @@ part 3: main part. obviously. how `kscript`, feature walkthroguh and examples.
 
 ### 1. Reproducible: Can we reproduce findings at a later date?
 
-### 2. Rapid Prototyping: Can we quickly run an analysis?
+### 2. Rapid Prototyping: Can we quickly setup an analysis?
 
-### 3. Scalable: Can we scale simple protocols into more complex systems?
+### 3. Scalable: Can we upscale workflows into more complex systems and products?
 
 ### 4. Community: Can we enable colleagues to analyze data?
 
@@ -83,6 +83,54 @@ walk through most common candidates when java, python, R, bit of bash
 
 performance left out --> just a linear factor anyway. hard to to a non-biased comparision
 
+
+---
+# Stick to the basics data-driven science?
+
+> But it's faster and way shorter to do it bash! (unknown colleague)
+
+Do _magical_ things in the terminal
+
+```bash
+removeMultiMappers(){
+perl -ne 'unless((!($_=~/^@.*/) && !(m/AS:i:/))||(m/AS:i:(\S+).+XS:i:(\S+)/ && $1-$2<1 )){print;}' 
+}
+```
+
+--
+
+> Marta Florio, Mareike Albert, Elena Taverna, Takashi Namba, **Holger Brandl**, Eric Lewitus, Christiane Haffner, Alex Sykes, Fong Kuan Wong, Jula Peters, E. Guhr, Sylvia Klemroth, Kay Prüfer, Janet Kelso, Ronald Naumann, Ina Nüsslein, Andreas Dahl, Robert Lachmann, Svante Pääbo, Wieland B. Huttner
+  **Human-specific gene ARHGAP11B promotes basal progenitor amplification and neocortex expansion.**
+  *Science* , 347(6229) 1465-1470 (2015)
+
+Get published and forget.
+
+### Fast to write. Impossible to maintain. Not even truly portable. Does not scale. Unteachable black art.
+
+???
+
+Not just one tool, but a zoo that has survived from the 80.
+
+
+`kscript` started of as a `bash` script until it hit a manageabilituy barrier at around ~500 polyglot (i.e. messy) lines.
+
+**TODO** move kscript example to kscript section
+
+
+hellfire A: fire & forget
+
+
+
+Lesson learned: Don't stop when it *just* works. Don't use awkward methods to avoid an actual implementation.
+
+just fast
+
+Don't get me wrong: the linux shell is great. often see bloated apis, why? it's faster and way shorter to do it bash
+Great frameworks like csv
+
+but
+
+
 ---
 background-image: url(images/0d638038_whiteend.jpg)
 background-position: center
@@ -91,29 +139,25 @@ background-size: 100%
 
 # Java for data-science?
 
-2001: First contact java
-
+2001 - First contact:
+> #### Evolving image processing for 2d gel electrophoresis analysis
 
 <!-- .image-50[![](images/0d638038.png)] -->
 
-Evolving image processing for 2d gel electrophoresis analysis
-
 --
 
-likes
-* Static typing providing guidance and context
-* Type-time checking of code thanks to IDEs
-* Deployment of an product
+Likes
+* Static typing provides guidance and context
+* Type- and compile-time checking of code
+* Ease of deployment
 * Java dependency trees rock!
 
 --
 
-dislikes
-* Prototyping happend in the debugger
+Dislikes
+* Prototyping in the debugger
 * Rerun apps again and again
-* lack of interactivity
-
-???
+* Lack of interactivity
 
 --
 
@@ -148,19 +192,20 @@ tree conflicts, by pulling
 
 
 ---
-# Java for data-science
+# Java for Data Science
 
 
 ### 1. Reproducible: Can we reproduce findings at a later date? ![](check.png)
 
-### 2. Rapid Prototyping: Can we quickly do setup an analysis?            ![](fail.png)
+### 2. Rapid Prototyping: Can we quickly setup an analysis?            ![](fail.png)
 
-### 3. Scalable: Can we scale simple protocols into more complex systems? ![](check.png)
+### 3. Scalable: Can we upscale workflows into more complex systems and products? ![](check.png)
 
-### 4. Learning curve: Can we enable colleagues to analyze data?            ![](fail.png)
+### 4. Community: Can we enable colleagues to analyze data?            ![](fail.png)
 
 
 ???
+
 Great because
 1. Rock-solid dependency model
 2. standardized deployment path
@@ -177,10 +222,8 @@ repl started in j9. but overal languge evolution very slow.
 
 
 ---
-# Python and R for data-driven sciense?
+# Most popular choices for data science?
 
-
-Most common.
 
 R stronger for statistics and explorative data-analysis (dplyr, tidyr, rstudio).
 
@@ -188,41 +231,49 @@ Python more popular for machine learning (i.e. kaggle, keras)
 
 Both are fun to teach and great for prototyping.
 
+.left-column40[
+.center[![](images/r_logo.jpeg)]
+]
+
+.right[
+![](images/python_logo.png)
+]
 
 ???
 
-todo pics here!
+for sure other options but none of them really appealing
 
 ---
-# Python dependencies
+# Python dependencies: The _best_ practice
 
-`pip install --user somtehing` mostly works these days, but
-* No binaries, always (slowly) compiles from scratch
-* Per project index only via `virtualenv`, which is tedious for small scale tasks:
+
 
 ```{r, engine='bash', eval=FALSE}
 virtualenv my_scikit
 
-## activate
 source my_scikit/bin/activate
 
 pip install -U scikit-learn
 
-## do something "quick" with
+## actual logic goes in here!
 /sw/bin/python -c '
 from sklearn import datasets
 ...
 '
 
-## get rid of it
 deactivate
 ```
 
-### no sound way to manage dependencies in python
+* Per project index only via `virtualenv`, which is tedious for small scale tasks
+* No binaries, always (slowly) compiles from scratch
 
-.footnote[[Why I hate virtualenv and pip](https://pythonrants.wordpress.com/2013/12/06/why-i-hate-virtualenv-and-pip/)]
+### No sound way to manage dependencies in python
+
 
 ???
+
+`pip install --user somtehing` mostly works these days, but
+
 
 I've tried.
 
@@ -235,6 +286,10 @@ Did not say impossible but lacks convenience and fault tolearnce
 Often just scriplet are just about 10 lines, more overhead than usercode.
 
 https://packaging.python.org/discussions/pip-vs-easy-install/
+
+
+[Why I hate virtualenv and pip](https://pythonrants.wordpress.com/2013/12/06/why-i-hate-virtualenv-and-pip/)
+
 
 "
 
@@ -255,12 +310,17 @@ Imports: assertthat, bindrcpp (>= 0.2), glue (>= 1.1.1), magrittr,
         methods, pkgconfig, rlang (>= 0.1.2), R6, Rcpp (>= 0.12.7),
         tibble (>= 1.3.1), utils
 ```
+--
+
+.image-200[![](images/me_in_hell.jpg)]
 
 
 ???
 
 
 from http://127.0.0.1:30576/library/dplyr/DESCRIPTION
+
+???
 
 
 ---
@@ -303,85 +363,6 @@ Polls are biass, but kd-nuggest community poll: Surpassed R in popuarlatiy for d
 
 
 
----
-# Stick to the basics data-driven science?
-
-> But it's faster and way shorter to do it bash! (colleagues)
-
-Do _magical_ thing in the terminal
-```bash
-removeMultiMappers(){
-perl -ne 'unless( ( !( $_=~/^@.*/ ) && !(m/AS:i:/ ) ) || ( m/AS:i:(\S+).+XS:i:(\S+)/ && $1-$2<1  ) ){ print;}' 
-}
-```
-
-> Marta Florio, Mareike Albert, Elena Taverna, Takashi Namba, **Holger Brandl**, Eric Lewitus, Christiane Haffner, Alex Sykes, Fong Kuan Wong, Jula Peters, E. Guhr, Sylvia Klemroth, Kay Prüfer, Janet Kelso, Ronald Naumann, Ina Nüsslein, Andreas Dahl, Robert Lachmann, Svante Pääbo, Wieland B. Huttner
-  **Human-specific gene ARHGAP11B promotes basal progenitor amplification and neocortex expansion.**
-  *Science* , 347(6229) 1465-1470 (2015)
-
-Get published and forget.
-
-
-Lesson learned: Don't stop when it *just* works. Don't use awkward methods to avoid an actual implementation.
-
-Not even truly portable. Does not scale, Unteachable black art.
-
-`kscript` started of as a `bash` script until it hit a manageabilituy barrier at around ~500 polyglot (i.e. messy) lines.
-
-**TODO** move kscript example to kscript section
-
-???
-
-hellfire A: fire & forget
-
-
-Don't get me wrong: the linux shell is great. often see bloated apis, why? it's faster and way shorter to do it bash
-Great frameworks like csv
-
-but
-
----
-# Stick to the basics to allow for proper tool integration?
-
-
-Easy to to polyglot programming.
-
-Enable integration
-
-The linux shell just rocks
-
-```bash
-zcat seq_dasta.fastq.gz  | \
-awk '{sub(/[ \t]*$/, "");print}' | \
-python -c '
-from Bio import SeqIO
-import sys
-
-for record in SeqIO.parse(sys.stdin, "fastq"):
-  if (record.description.split(" ")[1].startswith("1:")) : print record.description
-' | \
-gzip -c > processed_data.gz
-```
-
-
-`R` and `python` integrate nicely with `bash` *without* having any additional scripts floating around
-```bash
-cat iris.csv | \
-    Rscript --vanilla -e 'read.csv(file("stdin")) %>% dplyr::filter(Species=="setosa") %>% write.table(stdout()) ' | \
-    cut -f-1,3 > setosa.txt
-```
-
-Often best way if specialized tools get involved.
-
-Pick the best from all worlds? Sure, but in a solid way avoid ugle dependencies.
-
-???
-
-Especiall in science not everythone is working with services all day, but we stick existing cutting-edge tools to build workflows.
-
-rocks ... screen, coloring, pipes.
-
-
 
 ---
 # Deploy software for data-driven science
@@ -418,11 +399,11 @@ background-image: url(images/927721c9_white.jpg)
 background-position: center
 background-size: 110%
 
-## Tried it! ![](fail.png)
+## Tried it! ![](check.png)
 
 --
 
-## Sucessfully published! ![](fail.png)
+## Sucessfully published! ![](check.png)
 
 Raphael Etournay, Matthias Merkel, Marko Popović, **Holger Brandl**, Natalie Dye, Benoit Aigouy, Guillaume Salbreux, Suzanne Eaton, Frank Jülicher
   **TissueMiner: a multiscale analysis toolkit to quantify how cellular processes create tissue dynamics.**
@@ -467,6 +448,55 @@ can you send a script. can you send me 5gb container.
 More an expert thing
 
 Bottom Line: Scientist don't do web-serivces, the "just" write software. Difference between science & product devlopmen t.
+
+
+
+---
+# Stick to the basics to allow for proper tool integration?
+
+
+Easy to to polyglot programming.
+
+Enable integration
+
+The linux shell just rocks
+
+```bash
+zcat seq_dasta.fastq.gz  | \
+awk '{sub(/[ \t]*$/, "");print}' | \
+python -c '
+from Bio import SeqIO
+import sys
+
+for record in SeqIO.parse(sys.stdin, "fastq"):
+  if (record.description.split(" ")[1].startswith("1:")) : print record.description
+' | \
+gzip -c > processed_data.gz
+```
+
+Shell often still the best place for system integration
+
+`R` and `python` integrate nicely with `bash` *without* having any additional scripts floating around
+
+A shell runs apps, in particular __scripts__...
+
+
+???
+
+Often best way if specialized tools get involved.
+
+Pick the best from all worlds? Sure, but in a solid way avoid ugle dependencies.
+
+
+Especiall in science not everythone is working with services all day, but we stick existing cutting-edge tools to build workflows.
+
+rocks ... screen, coloring, pipes.
+
+```bash
+cat iris.csv | \
+    Rscript --vanilla -e 'read.csv(file("stdin")) %>% dplyr::filter(Species=="setosa") %>% write.table(stdout()) ' | \
+    cut -f-1,3 > setosa.txt
+```
 
 ---
 # State of art in data-driven science
