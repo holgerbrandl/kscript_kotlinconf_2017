@@ -60,3 +60,7 @@
         left: 0 !important;
     }
 }
+
+.hljs-github .hljs-string, .hljs-github .hljs-doctag {
+    color: #009e28;
+}
