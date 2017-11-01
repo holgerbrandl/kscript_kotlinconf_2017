@@ -7,6 +7,9 @@
 
 /*https://github.com/gnab/remark/issues/72*/
 
+.image-40 img {
+    width: 40%;
+}
 .image-50 img {
     width: 50%;
 }

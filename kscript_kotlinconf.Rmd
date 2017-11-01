@@ -84,6 +84,8 @@ walk through most common candidates when java, python, R, bit of bash
 performance left out --> just a linear factor anyway. hard to to a non-biased comparision
 
 
+community: analysts / scicntiest not engineers, sometimes even without a phds in computer science. curiopus about data. want to bring them onboard
+
 ---
 # Stick to the basics data-driven science?
 
@@ -374,9 +376,16 @@ Webservices don't scale with data. Bring tools to users.
   **Interplay of cell dynamics and epithelial tension during morphogenesis of the Drosophila pupal wing.**  
   *Elife* , 4 Art. No. e07090 (2015)
 
-embed movie here
+<section data-markdown>
 
-![](9b__blue_square_tracking.mp4)
+<video controls>
+<source src="9b__blue_square_tracking_rec.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+</section>
+
+![play movie](./9b__blue_square_tracking.mp4)
 
 
 ???
@@ -384,20 +393,25 @@ embed movie here
 Great projct. one of my all-time favorites.
 
 ---
-class: inverse
+class: inverse, center, middle
 
-background-image: url(images/927721c9.png)
+background-image: url(images/wing_cropped.jpg)
 background-position: center
 background-repeat: no-repeat
-background-size: 110%
+background-size: 120%
 
-# How to give it to the community? Dockerize it!?
+
+# How to give it to the community ?
+
+--
+
+# Dockerize it !
 
 
 ---
-background-image: url(images/927721c9_white.jpg)
+background-image: url(images/wing_cropped_white.jpg)
 background-position: center
-background-size: 110%
+background-size: 120%
 
 ## Tried it! ![](check.png)
 
@@ -423,7 +437,7 @@ tm track_cell_divisions <image_data>
 
 --
 
-## Doing just docker-support since then. ![](fail.png)
+## Doing _just_ docker-support since then. ![](fail.png)
 
 ???
 
@@ -452,70 +466,37 @@ Bottom Line: Scientist don't do web-serivces, the "just" write software. Differe
 
 
 ---
-# Stick to the basics to allow for proper tool integration?
+# A better way to do with data science?
 
+.left-column40[
+* Reproducibility, Dependencies & Scalability: **Java**
 
-Easy to to polyglot programming.
+* Prototyping & Community: **R & Python**
 
-Enable integration
+Fusion would be great:
 
-The linux shell just rocks
+####  Java with the ease of a scripting language
 
-```bash
-zcat seq_dasta.fastq.gz  | \
-awk '{sub(/[ \t]*$/, "");print}' | \
-python -c '
-from Bio import SeqIO
-import sys
+]
 
-for record in SeqIO.parse(sys.stdin, "fastq"):
-  if (record.description.split(" ")[1].startswith("1:")) : print record.description
-' | \
-gzip -c > processed_data.gz
-```
+--
 
-Shell often still the best place for system integration
+.right-column60[
+_eierlegende Wollmilchsau_
 
-`R` and `python` integrate nicely with `bash` *without* having any additional scripts floating around
+.image[![](images/7d17d6d4.png)]
 
-A shell runs apps, in particular __scripts__...
+]
 
 
 ???
 
-Often best way if specialized tools get involved.
-
-Pick the best from all worlds? Sure, but in a solid way avoid ugle dependencies.
-
-
-Especiall in science not everythone is working with services all day, but we stick existing cutting-edge tools to build workflows.
-
-rocks ... screen, coloring, pipes.
-
-```bash
-cat iris.csv | \
-    Rscript --vanilla -e 'read.csv(file("stdin")) %>% dplyr::filter(Species=="setosa") %>% write.table(stdout()) ' | \
-    cut -f-1,3 > setosa.txt
-```
-
----
-# State of art in data-driven science
-
-Reproducible, Dependencies & Scalbilty: Java
-
-Protyping & Community: **R & Python**
-
-
-What's needed for scientic software development?
-#####  Java with the ease of a scripting language
-
-
-???
 r&python mostly, java few,
 
 would provide magic 4: Reproducible, Rapid Prototyping, Scalable, Community
 
 
+Egg-laying wool-milk-sow?
 
 
 Prototype today using something convenient such as python
@@ -528,83 +509,76 @@ Reimplement later in a more production-ready language like
 * java
 * c++
 
-
----
-## Egg-laying wool-milk-sow?
-
-
-.image-50[![](images/7d17d6d4.png)]
-
-
-.footnote[From german _Eierlegende Wollmichau_]
-
-???
-
 Asking too much?
 
 
----
-
---
-# End 2015: First `kotlin` encounter!
-
-## Nice Syntax.
-
---
-
-## Uhhhh, still beta!
-
---
-
-## Go back to work.
-
-
 
 ---
+background-image: url(images/kotlin_logo.jpg)
+background-position: center
+background-repeat: no-repeat
+background-size: 80%
+
 # February 2016
 
-Kotlin v1.0.
+.left-column40[
 
-* type inference
-* extension function
-* data classes
-* dsls in mind
-* scripting = prototyping
-* all in a jvm context with nice dependencies
+Kotlin v1.0 released
 
+#### Type Inference
+#### Extension Functions
+#### Data Classes
+#### DSLs in Mind
+#### Default Parameters
+#### Lives in JVM
+#### Scripting Support
 
-**TODO** simley here!
+]
 
-Ready for reproducible analysis, Rapid Prototyping, proper dependeny model, Community
+--
+
+.right-column60[
+
+.right[
+Data Science Requirements
+## Proper Dependency Model ![](check.png)
+## Scales from idea to product ![](check.png)
+## Teachable ![](check.png)
+## Rapid Prototyping ??
+]
+]
 
 ???
+
+somewhen in early 2016 god seemed to have heard our prays, and gave us kotlin.
+
 release day 15.2.
 
-
 ---
+
+## Let's get to work
 
 ```bash
 kotlinc -script pipeline_prototype.kts
 ```
 
-which means
+which is equivalent to
 ```kotlin
 #!/usr/bin/env kotlinc -script
 
 println("do stuff")
-```
-Also works. :-)
 
-* But how to pull in dependencies? `kotlin -cp ...` seemed too tedious
-* Also since eval means recompile, it felt a bit slow
-* How to keep track of required JVM options
+val data = readData() // not quite yet!
+```
 
-```
-kotlin -cp ?? 
-```
+Issues with existing out-of-the-box `kotlinc` tooling
+* How to pull in dependencies? `kotlin -cp ...` seemed too tedious. Writing a separate gradle/maven file even more.
+* Also since `kotlinc` means recompile, it felt a bit slow
+* How to keep track of required JVM/runtime options?
+* More flexible way to provide scripts
+
 
 ???
-15.2.
 
 shebang did not work out
 
