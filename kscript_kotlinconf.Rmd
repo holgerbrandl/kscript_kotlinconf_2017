@@ -870,7 +870,7 @@ https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/average.html
 
 
 ---
-#  Support Kotlin applications with `main` method
+#  Use `//ENTRY` to run applications with `main` method
 
 `kscript` also supports running regular Kotlin `kt` files.
 
@@ -898,10 +898,9 @@ The latter is the default for `kt` files and could be omitted
 
 
 ---
-# Enhance your terminal with Kotlin
+# Ditch awk by using `kscript`s support API
 
 `kscript` can be used as a speedier and flexible substitute for built-in terminal tools such as `awk` or `sed`
-
 
 
 `awk`-mode: Scripts starting with `lines` enable a support-api for line-based text-processing.
@@ -924,52 +923,55 @@ See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitu
 
 
 ---
-# How to write kscriptlet?
+# Pimp your REPL with `--interactive`
 
-Why not language injection in Intellij
+```kotlin
+#!/usr/bin/env kscript
+*//DEPS de.mpicbg.scicomp:kutils:0.4
+import de.mpicbg.scicomp.bioinfo.openFasta
 
-<pichere!!>
+if (args.size != 1) {
+    System.err.println("Usage: CountRecords <fasta>")
+    kotlin.system.exitProcess(-1)
+}
+
+val records = openFasta(java.io.File(args[0]))
+println(records.count())
+```
+Bootstrap interactive shell. Example: `CountRecords.kts`
+
+```bash
+kscript --interactive CountRecords.kts
+```
+
+```
+Creating REPL from /Users/brandl/Dropbox/kscript_kotlinconf_2017/code_examples/count_records.kts
+Welcome to Kotlin version 1.1.51 (JRE 1.8.0_151-b12)
+import de.mpicbg.scicomp.bioinfo.openFasta
+>>> import de.mpicbg.scicomp.bioinfo.openFasta
+>>> 
+```
+
+---
+# Bootstrap project from scripts with `--idea`
+
+
+* Artifacts and versions will differ between scripts.
+* `kscript` allows to create temporary project from script using Gradle
+
+```bash
+kscript --idea CountRecords.kts
+```
+![](images/minus_idea.png)
+
+Requires command-line launcher `idea` to be setup via `Tools->Command Line Launcher`
+
+???
+
+
+
 
 * Vote for: [KT-13347](https://youtrack.jetbrains.com/issue/KT-13347) Good code is red in injected kotlin language snippets
-* Dependencies might  differ from project dependencies
-
-
-
----
-# Better: Use temporary project with dependency resolution
-
-```
-kscript --idea
-```
-
-Creates temporary project using gradle with script dependencies
-
-Requires command-line launcher to be setup via `Tools->Command Line Launcher`
-
-
-
----
-## KEEP [#75](https://github.com/Kotlin/KEEP/issues/75) Scripting Support
-
-
-.left-column40[
-![](images/9f4540b1.png)
-]
-
-
-.right-column60[
-Great proposal that aims to unify various aspects of scripting in a common API
-
-kscript is growing more organically based on community input.
-
-Kscript mostly overlaps with https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md#standalone-scripting
-
-What `kscript` covers already
-* IDE support via `--idea`
-* Project-level REPL `--interactive`
-* Directives to modulate includes, and dependency and runtime environment
-]
-
 
 
 ---
@@ -979,14 +981,100 @@ class: inverse, center, middle
 # What's next?
 
 ---
-## Quo vadis kscript?
 
-- Not much. Don't get infected by _featureritis_
-- Go *kotlin-native* to remove jvm launch overhead
-- Bundle dependency lookup via `keplin-maven-resolver` to avoid `mvn` dependency
-- Pray for [KT-16802](https://youtrack.jetbrains.com/issue/KT-16802) _Good code is always red when editing kts-script files under Kotlin v1.1_ to become fixed
+## Replace comment `//` directives with annotations
 
-- script-based dsl-support: Derive new interpreters from kscript
+Using proper file annotations would be better design and also allow for better tooling
+
+```kotlin
+// DEPS log4j:log4j:1.2.14
+
+@file:DependsOn("log4j:log4j:1.2.14")
+@file:KotlinOpts("-J-Xmx5g")
+```
+
+
+No such thing as `DependsOn` in kotlin stdlib. To enable correct code parsing add ` com.github.holgerbrandl:kscript-annotations:1.0` as dependency to the Intellij project
+
+
+.center[.image-75[![](images/annotations_example.png)]]
+
+
+???
+
+keplin: Secure Kotlin scripting and binary lambda-scripts
+
+
+We would prefer annotations over custom syntax!
+
+don't reinvent the wheel, follow the communiy ... support the moment it goes live.
+
+Why not default?
+
+---
+# Getting serious about scripting with KEEP [#75 ](https://github.com/Kotlin/KEEP/issues/75)
+
+Great proposal that aims to unify various aspects of scripting in a common API
+
+* Define Kotlin scripting and it's applications
+* Describe intended use cases for the Kotlin scripting
+* Provide sufficient control of interpretation and execution of scripts
+* Provide usable default components and configurations for the typical use cases
+
+--
+
+Some core aspects are implemented  by `kscript`!
+
+* IDE/tooling support via `--idea`
+* Project-level REPL `--interactive`
+* Directives/annotations modulate includes, and dependency and runtime environment
+
+--
+
+.left-column50[
+
+#### Will kill it `kscript`? Maybe.
+#### Looking forward to tool convergence!
+]
+
+.left-column50[
+
+![](images/kscript_grave.png)
+]
+
+???
+
+Will make `kscript` superfluous? Not any time soon given previous speed
+
+Kscript mostly overlaps with https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md#standalone-scripting
+
+---
+# Next steps?
+
+
+* Go `kotlin-native*` to remove JVM launch overhead
+```bash
+exec $(kotlin -classpath ${jarPath} kscript.app.KscriptKt "$@")
+```
+* Support for custom artifact repositories
+
+* Pray for [KT-16802](https://youtrack.jetbrains.com/issue/KT-16802) _Good code is always red when editing kts-script files under Kotlin v1.1_ to become fixed
+
+.center[.image-50[.images[![](images/ide_bug.png)]]]
+
+#### Not many. Don't get infected by _featureritis_!
+
+#### `kscript` is unit- and battle-tested, and ready production!
+
+
+---
+# Dream, dream, dream...
+
+* Revise annotation-driven script configuration once Scripting API (KEEP75 + keplin) supports it
+
+* Use [kohesive/keplin-maven-resolver](https://github.com/kohesive/keplin) for dependency resolution instead of `mvn`
+
+* DSL-support: Derive new interpreters from `kscript`
 
 ```kotlin
 #!/usr/bin/env tornando-fx-script
@@ -997,38 +1085,13 @@ class HelloWorld : View() {
     }
 }
 ```
+* Support for java files?
 
-- Use annotation-driven script configuration once Scripting API supports them
-- Support for java files?
+
+
+* <your ideas here!>
 
 ???
-
-native requires at least some 'java.io.File'-like native API
-
-https://github.com/Kotlin/KEEP/issues/75
-
-https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
-
-
----
-## Replace `//` directives with annotations
-
-Using proper file annotations would be better design and also allow for better tooling
-
-```kotlin
-// DEPS log4j:log4j:1.2.14
-
-// vs
-
-@file:DependsOn("log4j:log4j:1.2.14")
-```
-
-
-No such thing as `DependsOn` in kotlin stdlib. Custom project artifact dependency declaring those extra annotations would be needed.
-
-Not yet there, but planned as additional feature for more advanced users.
-
-KEEP #75 _Scripting Enhancements_ may change this, `kscript` will support it.
 
 Recently implemented in [kohesive/keplin](https://github.com/kohesive/keplin)**
 and used for `[kotlin-jupyter](https://github.com/ligee/kotlin-jupyter)` kernel, so maybe integrate it from there.
@@ -1036,18 +1099,22 @@ and used for `[kotlin-jupyter](https://github.com/ligee/kotlin-jupyter)` kernel,
 
 ???
 
-We would prefer annotations over custom syntax!
-
-... support the moment it goes live.
+native requires at least some 'java.io.File'-like native API
 
 
+DSL talk: Frederico Tomasetti
+https://github.com/Kotlin/KEEP/issues/75
+
+https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 
 ---
-## How Kotlin may help to shape a more solid language for data-science?
+## What's still missing in kotlin to become the next big thing for  in data-science?
 
-1. Continue jupyter-kernel support  (interactive usage, but also report rendering using kotlin scripts)
+1. **Interactivy**: Continue jupyter-kernel support  (interactive usage, but also report rendering using kotlin scripts)
 2. Provide a cut-down version IJ for Kotlin. Newbies are overwhelmed with current builds. Would also help for teaching
-3. More libraries.
+3. Fix the REPL to become truly interactive
+4. Better visualization (dplyr, d3)
+5. More libraries. Just wrap existing JVM libraries!
 
 ???
 long way python and r are miles ahead with the data-sciene libaries.
@@ -1055,20 +1122,20 @@ long way python and r are miles ahead with the data-sciene libaries.
 ---
 ## Acknowledgements
 
+
+.left[
 * inspired by [kotlin-script](https://github.com/andrewoma/kotlin-script)
-
 * Oscar Gonzales
-
 * Github Community
 
+]
+
+.right[
 * Scientific Computing Facility @ MPI-CBG
+* Scionics Computer Innovation GmbH
+* Jetbrains (Ilya Chernikov,
+]
 
-* Jetbrains
-
-
-???
-
-**TODO** pics here
 
 ---
 class: inverse
@@ -1076,11 +1143,13 @@ class: inverse
 ## Summary
 
 
-### Languages for data-sciene must allow share code between prottypes and products, should quick to get started with, and should allow for rapid prototyping
+### Languages for data-science must allow to share code between prototypes and products, should quick to get started with, and should allow for rapid prototyping
 
 ### Kotlin may be the right choice.
 
 ### `kscript` provides enhanced scripting support for Kotlin.
+
+Thanks for your attention.
 
 .footnote[
 Questions and pull requests are welcome.
