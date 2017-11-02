@@ -897,11 +897,14 @@ To run top-level main instead we would use `//ENTRY examples.FooKt`
 The latter is the default for `kt` files and could be omitted
 
 
-
 ---
 # Enhance your terminal with Kotlin
 
 `kscript` can be used as a speedier and flexible substitute for built-in terminal tools such as `awk` or `sed`
+
+
+
+`awk`-mode: Scripts starting with `lines` enable a support-api for line-based text-processing.
 
 Delete a column
 
@@ -917,12 +920,11 @@ awk '{sub(/[ \t]*$/, "");print}' file.txt
 kscript 'lines.map { it.trim() }.print()' file.txt
 ```
 
-.footnote[For more examples see [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]
-
+See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]
 
 
 ---
-# How to edit a kscriptlet?
+# How to write kscriptlet?
 
 Why not language injection in Intellij
 
@@ -1054,9 +1056,13 @@ long way python and r are miles ahead with the data-sciene libaries.
 ## Acknowledgements
 
 * inspired by [kotlin-script](https://github.com/andrewoma/kotlin-script)
+
 * Oscar Gonzales
+
 * Github Community
+
 * Scientific Computing Facility @ MPI-CBG
+
 * Jetbrains
 
 
