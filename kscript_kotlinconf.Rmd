@@ -26,9 +26,9 @@ welcome -> holger --> dresden, germany--> data consultant in academic= life scie
 
 first, thanks
 
-cool to meet people involved from the kotlin community in person.
+cool to meet people from the kotlin community in person.
 
-honored to be here
+honored to be here, humble contribution to kotlin ecosystem
 
 topic -> little but handy tool called kscript
 
@@ -82,11 +82,14 @@ part 3: main part. obviously. how `kscript`, feature walkthroguh and examples.
 
 ???
 
+not complete listing, but most important ingredients
+
+start with script, but long run model cell, tiusse, pyhcucal system, some aspect universe
+
+community: analysts / scientist not engineers, . curious about data. want to bring them onboard. usable without having a phd in computer science
 
 with those requirmentwalk through most common candidates when bash, java, python, R
 
-
-community: analysts / scientist not engineers, . curious about data. want to bring them onboard. usable without having a phd in computer science
 
 ---
 # Use just the linux shell for data-driven science?
@@ -111,6 +114,8 @@ bowtie2 $fastqFile | samtools view -SF 4 -  | removeMultiMappers | samtools sort
 > Marta Florio, Mareike Albert, Elena Taverna, Takashi Namba, **Holger Brandl**, Eric Lewitus, Christiane Haffner, Alex Sykes, Fong Kuan Wong, Jula Peters, E. Guhr, Sylvia Klemroth, Kay Prüfer, Janet Kelso, Ronald Naumann, Ina Nüsslein, Andreas Dahl, Robert Lachmann, Svante Pääbo, Wieland B. Huttner
   **Human-specific gene ARHGAP11B promotes basal progenitor amplification and neocortex expansion.**
   *Science* , 347(6229) 1465-1470 (2015)
+
+--
 
 Get published and forget.
 
@@ -169,29 +174,8 @@ Dislikes
 
 ???
 
-tag line: core of data-science, isn't it!!
 
 * Did not know about REPL (python R, but experience felt flawed already
-
-java first, guess most audience have java background.
-
-Actually... first programming language after toying around with c while being in high-school
-
-First API: JAI, quit a nut to crack
-Very explorative --> prototyping
-
-bottom line: great language, still love it.
-
-<!-- .image-50[![](images/fdc07197.png)] -->
-Dependencies:
-Well formed tree with specific versions
-Developer decides how to resolve versions conflicts
-
-worked with java a lot since, dependncy manageent always amazed me
-
-every dependency is specific about sub-depndency. No doubt how to assemble a system
-
-tree conflicts, by pulling
 
 
 ---
@@ -275,20 +259,9 @@ deactivate
 
 ???
 
-`pip install --user somtehing` mostly works these days, but
-
-
-I've tried.
-
 Shed light on most crticial feature: Reproducitbilitgy.
 
-But there's `virtualenv`/`pip`?!
-
-Did not say impossible but lacks convenience and fault tolearnce
-
 Often just scriplet are just about 10 lines, more overhead than usercode.
-
-https://packaging.python.org/discussions/pip-vs-easy-install/
 
 
 [Why I hate virtualenv and pip](https://pythonrants.wordpress.com/2013/12/06/why-i-hate-virtualenv-and-pip/)
@@ -342,27 +315,16 @@ from http://127.0.0.1:30576/library/dplyr/DESCRIPTION
 
 How are `R` and `python` fail in the data science process?
 
-Do not scale to more complex systems
-and fail to provide a proper dependency tooling
 
-
-1. No rock-solid dependency model
+1. fail to provide a robust dependency tooling
 2. No standardized deployment path
-3. Missing scalabilty to build complex systems
+3. Missing scalabilty to build complex systems due to dynamic typing that prevents scaling up systems
 
 Don't get me wrong, they are
 * Great for protoyping
 * easy to get started with
 * Amazing level of interactivity
 
-
-Users reimplement prototype often in python but reimplement for speed and
-
-That's why python does extremly well. Not because it's excellent in all recards. Su
-
-Polls are biass, but kd-nuggest community poll: Surpassed R in popuarlatiy for data-science.
-
-dynamic typing prevents scaling up systems
 
 
 ---
@@ -410,7 +372,7 @@ background-size: 120%
 
 ???
 
-C++, python, java, R, --> hard to setup
+C++, python, java, R, --> scared to give it away --> hard to setup
 
 ---
 background-image: url(images/wing_cropped_white.jpg)
@@ -445,12 +407,11 @@ tm track_cell_divisions <image_data>
 
 ???
 
-not much feedback with respect to science
-
 docker is great. use it almost daily.
 
+not much feedback with respect to science
+
 just technical support since then
-* Harder to communicate (especially to less experienced users)
 
 
 Take home message
@@ -486,29 +447,24 @@ _eierlegende Wollmilchsau_
 
 ???
 
-god why is it all so complicated
 
 r&python mostly, java few,
-
-would provide magic 4: Reproducible, Rapid Prototyping, Scalable, Community
-
-
-Egg-laying wool-milk-sow?
-
 
 Prototype today using something convenient such as python
 * python
 * R
 
-Integrate workflows via the shell.
-
 Reimplement later in a more production-ready language like
 * java
 * c++
+* 
+god why is it all so complicated
 
-Asking too much?
+
+would provide magic 4: Reproducible, Rapid Prototyping, Scalable, Community
 
 
+Egg-laying wool-milk-sow?
 
 ---
 background-image: url(images/kotlin_logo.jpg)
@@ -551,7 +507,9 @@ somewhen in early 2016 god seemed to have heard our prays, and gave us kotlin.
 
 release day 15.2.
 
-techable: less than ptyhon or r , but better tooling
+what a beayty!
+
+teachable: less than python or r, but better tooling
 
 ---
 
@@ -666,7 +624,7 @@ The `<script>` argument can be a
 
 ???
 
-...let me give you one example so that we can develop a better feeling about it works
+...let me give you some examples so that we can develop a better feeling about it works
 
 ---
 # Interpreter Usage
