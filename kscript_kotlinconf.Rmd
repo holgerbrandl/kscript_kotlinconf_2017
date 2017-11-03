@@ -20,6 +20,19 @@ background-position: center
 background-repeat: no-repeat
 background-size: 100%
 
+???
+
+welcome -> holger --> dresden, germany--> data consultant in academic= life science research center
+
+first, thanks
+
+cool to meet people involved from the kotlin community in person.
+
+honored to be here
+
+topic -> little but handy tool called kscript
+
+
 
 ---
 
@@ -404,7 +417,7 @@ background-repeat: no-repeat
 background-size: 120%
 
 
-# How to give it to the community?
+# How to ship it to the community?
 
 --
 
@@ -447,27 +460,18 @@ tm track_cell_divisions <image_data>
 
 ???
 
- Issues when shipping apps as executable containers
-
-* Harder to communicate (especially to less experienced users)
-* Harder to handle, i.e. ¡lack convenience of a true tool
-* Quit some devops overhead just to keep it up and running
-
-
-What do we learn:
-> Bundling tools as containers not yet the way to go. More lightweight solution seem better.
-
-Depends on environment. Academia environment, even if most colleuges hoave some phd, mostly not in computer science, but bio, chemistry. still interested. Also students, less techy staff--> harder & more support efforts
+not much feedback with respect to science
 
 docker is great. use it almost daily.
 
-Adds complexity layers that lacks ease of prototyping
+just technical support since then
+* Harder to communicate (especially to less experienced users)
 
-can you send a script. can you send me 5gb container.
 
-More an expert thing
+Take home message
+> Bundling tools as containers not yet the way to go. More lightweight solution seem better.
 
-Bottom Line: Scientist don't do web-serivces, the "just" write software. Difference between science & product devlopmen t.
+data science context --> users might be experts in a specific domain, but less technically skilled -> docker not the right tool yet
 
 
 
@@ -496,6 +500,8 @@ _eierlegende Wollmilchsau_
 
 
 ???
+
+god why is it all so complicated
 
 r&python mostly, java few,
 
@@ -560,6 +566,8 @@ somewhen in early 2016 god seemed to have heard our prays, and gave us kotlin.
 
 release day 15.2.
 
+techable: less than ptyhon or r , but better tooling
+
 ---
 
 # Let's write a script!
@@ -601,7 +609,12 @@ Enhanced scripting support for [Kotlin](https://kotlinlang.org/) on *nix-based s
 
 ???
 
-Kotlin has some built-in support for scripting already but it is not yet feature-rich enough to be a viable alternative in the shell.
+Kotlin had some built-in support for scripting already but it is not yet feature-rich enough to be a viable alternative for writing small termial tools, scripts, data-workflows.
+
+so shortly after ....
+has techically changed since, started off as a bash script, but is now writter in kotlin itself.
+
+what is a mini-application? fuzzy concept that does not really exist. can be Prototype, quick analysis, commanmd utility, anything small enough to live in a single file without the gradle/pom infracstructure
 
 
 ---
@@ -630,7 +643,7 @@ kscript --help
 kscript - Enhanced scripting support for Kotlin on *nix-based systems.
 
 Usage:
- kscript [options] <script> [<script_args>]...
+*kscript [options] <script> [<script_args>]...
  kscript --clear-cache
  kscript --self-update
 
@@ -650,6 +663,9 @@ License   : MIT
 Version   : v2.1.0
 Website   : https://github.com/holgerbrandl/kscript
 ```
+???
+
+lighweight interface -> essentially takes a script as an argument along with some argument that are **forwarded** to the script as input
 
 ---
 # Input Modes
@@ -663,6 +679,9 @@ The `<script>` argument can be a
 - some kotlin code
 - a `*.kt` source file with a main method,
 
+???
+
+...let me give you one example so that we can develop a better feeling about it works
 
 ---
 # Interpreter Usage
@@ -685,6 +704,12 @@ chmod +x Example.kts
 
 ./Example.kts
 ```
+
+???
+
+create a file --> indicate kscript in the shebang --> user logic --> could be small command line utility, workflow, anything which can/should work as a self-contained script
+
+actual funs starts when making it executable --> run a any other tool
 
 
 ---
@@ -715,6 +740,8 @@ EOF
 ```
 
 ???
+
+...throw in a few bits of kotlin here and there...
 
 also process substitution is also supported
 
@@ -817,6 +844,16 @@ val conversionTable = jsonArray.map { (it as JsonObject) }.map {
 Run as tool with just `id_converter.kts 232 42323 23`
 
 
+???
+
+
+
+ksript resolves depedency declarations into actual classpath using maven
+
+enables us to implement a sel-contained application with dependencies on a single slide
+
+Personally think, that this is pretty cool.
+
 ---
 # Configure the runtime  with `//KOTLIN_OPTS`
 
@@ -841,21 +878,25 @@ val fastaFile = java.io.File(args[0])
 val lengthCutoff = args[1].toInt()
 
 openFasta(fastaFile).
-        filter { it.sequence.length >= lengthCutoff }.
+        filter { it.sequence.length <= lengthCutoff }.
         forEach { print(it.toEntryString()) }
 ```
 
 ???
+
+next example of how we can manipulare runtime environment
+
+actual example
+
+filter for genes up to a certain length
 
 this is what's needed most of the time
 
 ---
 # Ease prototyping with `//INCLUDE`
 
-Artifacts are the proper way!
 
-But many other languages allow to directly include source files.
-
+Many other languages allow to directly include source files. Can we do the same in Kotlin? Yes, with `kscript`!
 
 ```kotlin
 //utils.kt
@@ -864,6 +905,8 @@ fun Array<Double>.median(): Double {
     return if (size % 2 == 0) (lower.last() + upper.first()) / 2.0 else upper.first()
 }
 ```
+Artifacts are the proper way!
+
 `kscript` allows to skip artifact deployment by using `//INCLUDE`
 
 
@@ -882,12 +925,21 @@ println(robustMean)
 The **median** is the value separating the higher half of a data [sample](https://en.wikipedia.org/wiki/Sample_(statistics) "Sample (statistics)"),
 
 
-Again prototyping vs development
+outlier-tolerant version of arithmetic mean.
 
+include allows to inject the content of a resource directly into the script
+
+no need to declare a dependcy here
+
+Scope: Prototyping and devlopment.
+
+Make users from R and python to feel at home!
+
+.footnote[
 https://stackoverflow.com/questions/36959031/how-to-source-file-into-python-script
 
 https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/average.html
-
+]
 
 ---
 #  Use `//ENTRY` to run applications with `main` method
@@ -899,9 +951,9 @@ Example: `./examples/Foo.kt`:
 ```kotlin
 package examples
 
-//ENTRY examples.Foo
+//ENTRY examples.Bar
 
-class Foo{
+class Bar{
     companion object {
         @JvmStatic fun main(args: Array<String>) {
             println("Foo was called")
@@ -917,12 +969,21 @@ To run top-level main instead we would use `//ENTRY examples.FooKt`
 The latter is the default for `kt` files and could be omitted
 
 
+???
+nice infrastructure, why not run kotlin applications via kscript?
+
+bit tricky, because of the flexibility Kotlin gives you to define entrypoints
+
+single file-> multiple entrypoints
+
+
+
 ---
 # Replace `awk`ward terminal programming with Kotlin
 
 `kscript` can be used as a speedier and more flexible substitute for built-in terminal tools such as `awk` or `sed`
 
-Use `-t`/`--text` to enable a support-api for line-based text-processing
+Use `-t`/`--text` to enable a support API for line-based text processing
 
 
 * Delete a column
@@ -941,6 +1002,11 @@ kscript -t 'lines.map { it.trim() }.print()' file.txt
 
 See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)
 
+???
+reoccuring use-case was ...
+
+so streamline that
+
 ---
 # Pimp your REPL with `--interactive`
 
@@ -957,6 +1023,9 @@ if (args.size != 1) {
 val records = openFasta(java.io.File(args[0]))
 println(records.count())
 ```
+
+--
+
 Bootstrap interactive shell from your script. Example: `CountRecords.kts`
 
 ```bash
@@ -969,6 +1038,13 @@ Welcome to Kotlin version 1.1.51 (JRE 1.8.0_151-b12)
 >>> import de.mpicbg.scicomp.bioinfo.openFasta
 >>> 
 ```
+
+???
+toggle between coding and interactive development
+
+evolve a workflow bing up an environment that matches the script
+
+to give you an example
 
 ---
 # Bootstrap project from scripts with `--idea`
@@ -986,10 +1062,9 @@ Requires command-line launcher `idea` to be setup via `Tools->Command Line Launc
 
 ???
 
+final feature is about
 
-
-
-* Vote for: [KT-13347](https://youtrack.jetbrains.com/issue/KT-13347) Good code is red in injected kotlin language snippets
+why? having multiple differening depedencies, hard to create intellij project to accomodate difference version
 
 
 ---
@@ -997,6 +1072,13 @@ Requires command-line launcher `idea` to be setup via `Tools->Command Line Launc
 class: inverse, center, middle
 
 # What's next?
+
+
+???
+
+walked through all the main features
+
+use the remaining limits to outline future directions of kscript and the use of kotlin as a language for data scicen
 
 ---
 
@@ -1006,11 +1088,9 @@ Using proper file annotations would be better design and also allow for better t
 
 ```kotlin
 // DEPS log4j:log4j:1.2.14
-
+//vs
 @file:DependsOn("log4j:log4j:1.2.14")
-@file:KotlinOpts("-J-Xmx5g")
 ```
-
 
 No such thing as `DependsOn` in kotlin stdlib. To enable correct code parsing add ` com.github.holgerbrandl:kscript-annotations:1.0` as dependency to the Intellij project
 
@@ -1020,10 +1100,8 @@ No such thing as `DependsOn` in kotlin stdlib. To enable correct code parsing ad
 
 ???
 
-keplin: Secure Kotlin scripting and binary lambda-scripts
-
-
-We would prefer annotations over custom syntax!
+why comments to configure deps and runtime, why not using annotations?
+You're right about it! It is better to use annotations over custom syntax!
 
 don't reinvent the wheel, follow the communiy ... support the moment it goes live.
 
@@ -1045,7 +1123,7 @@ Some core aspects are implemented  by `kscript`!
 
 * IDE/tooling support via `--idea`
 * Project-level REPL `--interactive`
-* Directives/annotations modulate includes, and dependency and runtime environment
+* Directives/annotations to declare dependencies and modulate the runtime environment
 
 --
 
@@ -1068,13 +1146,13 @@ Ilya Chernikov
 
 Will make `kscript` superfluous? Not any time soon given previous speed
 
-Kscript mostly overlaps with https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md#standalone-scripting
+don't care, all I want is rock-solid scriptinh support that is fun to use.
 
 ---
 # Next steps?
 
 
-* Go `kotlin-native*` to remove JVM launch overhead
+* Go `kotlin-native` to remove ~200ms JVM launch overhead
 ```bash
 exec $(kotlin -classpath ${jarPath} kscript.app.KscriptKt "$@")
 ```
@@ -1112,17 +1190,16 @@ class HelloWorld : View() {
 
 ???
 
-Recently implemented in [kohesive/keplin](https://github.com/kohesive/keplin)**
-and used for `[kotlin-jupyter](https://github.com/ligee/kotlin-jupyter)` kernel, so maybe integrate it from there.
-
-
 native requires at least some 'java.io.File'-like native API
 
+many features presented were actually suggested by community --> so if you have an idea
 
+.footnote[
 DSL talk: Frederico Tomasetti
 https://github.com/Kotlin/KEEP/issues/75
 
 https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
+]
 
 ---
 ## What's still missing in Kotlin to rule data-science?
@@ -1135,6 +1212,10 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 4. **Data-Science IDE** Provide a _cut down_ version IJ for Kotlin.
 
 ???
+
+coming back to initial motivation.
+
+is it really ready yet?
 
 
 --
@@ -1152,6 +1233,8 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 ]
 
 ???
+
+don't blame anyone, Kotlin is still a young products, where some parts are work in progres
 
 Read–eval–print_loop
 
@@ -1179,6 +1262,8 @@ Questions and pull requests are welcome.
 For these slides, more docs, examples see https://github.com/holgerbrandl/kscript
 
 Thanks for your attention.
+
+Thanks to the contributors of kscript for their great feedback and help.
 
 
 ???
