@@ -642,6 +642,7 @@ Use '--self-update' to wipe cached script jars and urls
 
 Options:
  -i --interactive        Create interactive shell with dependencies as declared in script
+  -t --text               Enable stdin support API for more streamlined text processing
  --idea                  Open script in temporary Intellij session
 
 Copyright : 2017 Holger Brandl
@@ -929,14 +930,14 @@ Delete a column
 
 ```{r, engine='bash', eval=FALSE}
 awk '!($3="")'  some_flights.tsv
-kscript 'lines.split().select(-3).print()' some_flights.tsv 
+kscript -t 'lines.split().select(-3).print()' some_flights.tsv 
 ```
 
 
 Delete trailing white space (spaces, tabs)
 ```{r, engine='bash', eval=FALSE}
 awk '{sub(/[ \t]*$/, "");print}' file.txt
-kscript 'lines.map { it.trim() }.print()' file.txt
+kscript -t 'lines.map { it.trim() }.print()' file.txt
 ```
 
 See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]

@@ -647,6 +647,7 @@ Use '--self-update' to wipe cached script jars and urls
 Options:
  -i --interactive        Create interactive shell with dependencies as declared in script
  --idea                  Open script in temporary Intellij session
+ -t --text               Enable stdin support API for more streamlined text processing
 
 Copyright : 2017 Holger Brandl
 License   : MIT
@@ -849,6 +850,9 @@ openFasta(fastaFile).
         forEach { print(it.toEntryString()) }
 ```
 
+???
+
+this is what's needed most of the time
 
 ---
 # Ease prototyping with `//INCLUDE`
@@ -862,7 +866,7 @@ But many other languages allow to directly include source files.
 //utils.kt
 fun Array&lt;Double&gt;.median(): Double {
     val (lower, upper) = sorted().let { take(size / 2) to takeLast(size / 2) }
-        return if (size % 2 == 0) (lower.last() + upper.first()) / 2.0 else upper.first()
+    return if (size % 2 == 0) (lower.last() + upper.first()) / 2.0 else upper.first()
 }
 ```
 `kscript` allows to skip artifact deployment by using `//INCLUDE`
@@ -879,6 +883,9 @@ val robustMean = listOf(1.3, 42.3, 7.).median()
 println(robustMean)
 ```
 ???
+
+The **median** is the value separating the higher half of a data [sample](https://en.wikipedia.org/wiki/Sample_(statistics) "Sample (statistics)"),
+
 
 Again prototyping vs development
 
