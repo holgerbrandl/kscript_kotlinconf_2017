@@ -1263,7 +1263,7 @@ For these slides, more docs, examples see https://github.com/holgerbrandl/kscrip
 
 Thanks for your attention.
 
-Thanks to the contributors of kscript for their great feedback and help.
+Thanks to the contributors of `kscript` for their great feedback and help.
 
 
 ???
