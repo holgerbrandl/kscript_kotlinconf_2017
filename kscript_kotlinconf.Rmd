@@ -302,7 +302,7 @@ https://packaging.python.org/discussions/pip-vs-easy-install/
 
 * No built-in way to indicate a specific dependency version for a project
 
-* Also declaration of package-depdencies is sloppy by design
+* Also declaration of package-dependencies is sloppy by design
 
 ```
 Imports: assertthat, bindrcpp (>= 0.2), glue (>= 1.1.1), magrittr,
@@ -310,7 +310,7 @@ Imports: assertthat, bindrcpp (>= 0.2), glue (>= 1.1.1), magrittr,
         tibble (>= 1.3.1), utils
 ```
 
-* Existing approaches like [packrat](https://github.com/rstudio/packrat) no yet ready for primetime: build package index from scratch per project
+* Existing approaches like [packrat](https://github.com/rstudio/packrat) are no yet ready for prime time: build package index from scratch per project
 
 --
 
@@ -461,7 +461,7 @@ data science context --> users might be experts in a specific domain, but less t
 
 
 ---
-# A better way to do with data science?
+# A better way to do data science?
 
 .left-column40[
 * Reproducibility, Dependencies & Scalability: **Java**
