@@ -49,7 +49,7 @@ part 1: my background, data scientiest/analyst working with various kinds of dat
 * Shortcomings of existing languages
 * What works and what did not
 
-part 2: argue that kotlin might . short because assumed that audience knowns kotlin. what's missing  yet
+part 2: argue that Kotlin might . short because assumed that audience knowns Kotlin. what's missing  yet
 
 
 * botoom line: ombination of simplified language &amp; very good dependency model/tooling
@@ -58,7 +58,7 @@ part 3: main part. obviously. how `kscript`, feature walkthroguh and examples.
 
 
 * `kscript` Scripting enhancements Kotlin
-* How kotlin helps
+* How Kotlin helps
 * What's missing and what we can do about it
 
 
@@ -70,7 +70,7 @@ part 3: main part. obviously. how `kscript`, feature walkthroguh and examples.
 
 ### 2. Rapid Prototyping: Can we quickly setup an analysis?
 
-### 3. Scalable: Can we upscale workflows into more complex systems and products?
+### 3. Scalable: Can we upscale scripts into systems and tools?
 
 ### 4. Community: Can we enable colleagues to analyze data?
 
@@ -93,12 +93,16 @@ community: analysts / scicntiest not engineers, sometimes even without a phds in
 
 &gt; But it's faster and way shorter to do it bash! (unknown colleague)
 
-Do _magical_ things in the terminal
+
+Do _magical_ things in the terminal without dependencies
+
+--
 
 ```bash
 removeMultiMappers(){
-perl -ne 'unless((!($_=~/^@.*/) &amp;&amp; !(m/AS:i:/))||(m/AS:i:(\S+).+XS:i:(\S+)/ &amp;&amp; $1-$2&lt;1 )){print;}' 
+perl -ne 'unless((!($_=~/^@.*/)&amp;&amp;!(m/AS:i:/))||(m/AS:i:(\S+).+XS:i:(\S+)/ &amp;&amp; $1-$2&lt;1)){print;}' 
 }
+bowtie2 $fastqFile | samtools view -SF 4 -  | removeMultiMappers | samtools sort - result.bam
 ```
 
 --
@@ -109,7 +113,7 @@ perl -ne 'unless((!($_=~/^@.*/) &amp;&amp; !(m/AS:i:/))||(m/AS:i:(\S+).+XS:i:(\S
 
 Get published and forget.
 
-### Fast to write. Impossible to maintain. Not even truly portable. Does not scale. Unteachable black art.
+### Fast to write. Impossible to maintain. Not even portable. Does not scale. Unteachable black art.
 
 ???
 
@@ -141,7 +145,7 @@ background-position: center
 background-repeat: no-repeat
 background-size: 100%
 
-# Java for data-science?
+# Java for Data Science?
 
 2001 - First contact:
 &gt; #### Evolving image processing for 2d gel electrophoresis analysis
@@ -196,14 +200,14 @@ tree conflicts, by pulling
 
 
 ---
-# Java for Data Science
+# Java for Data Science?
 
 
 ### 1. Reproducible: Can we reproduce findings at a later date? ![](check.png)
 
 ### 2. Rapid Prototyping: Can we quickly setup an analysis?            ![](fail.png)
 
-### 3. Scalable: Can we upscale workflows into more complex systems and products? ![](check.png)
+### 3. Scalable: Can we upscale scripts into systems and tools? ![](check.png)
 
 ### 4. Community: Can we enable colleagues to analyze data?            ![](fail.png)
 
@@ -231,7 +235,7 @@ repl started in j9. but overal languge evolution very slow.
 
 R stronger for statistics and explorative data-analysis (dplyr, tidyr, rstudio).
 
-Python more popular for machine learning (i.e. kaggle, keras)
+Python more popular for machine learning (kaggle, keras, scikit)
 
 Both are fun to teach and great for prototyping.
 
@@ -248,7 +252,7 @@ Both are fun to teach and great for prototyping.
 for sure other options but none of them really appealing
 
 ---
-# Python dependencies: The _best_ practice
+# Python Dependencies: The _best_ practice
 
 
 
@@ -263,7 +267,7 @@ pip install -U scikit-learn
 ## actual logic goes in here!
 /sw/bin/python -c '
 from sklearn import datasets
-...
+... the cool stuff! 
 '
 
 deactivate
@@ -302,19 +306,18 @@ https://packaging.python.org/discussions/pip-vs-easy-install/
 ---
 # R dependencies
 
-1. No built-in way to indicate a specific version for a project
+* No built-in way to indicate a specific version for a project
 
-
-* [packrat](https://github.com/rstudio/packrat) - build package index from scratch for each
-
-
-2. Also package-depdencies sloppy by design
+* Also declaration of package-depdencies is sloppy by design
 
 ```
 Imports: assertthat, bindrcpp (&gt;= 0.2), glue (&gt;= 1.1.1), magrittr,
         methods, pkgconfig, rlang (&gt;= 0.1.2), R6, Rcpp (&gt;= 0.12.7),
         tibble (&gt;= 1.3.1), utils
 ```
+
+* Existing approaches like [packrat](https://github.com/rstudio/packrat) no yet ready for primetime: build package index from scratch per project
+
 --
 
 .image-200[![](images/me_in_hell.jpg)]
@@ -329,17 +332,16 @@ from http://127.0.0.1:30576/library/dplyr/DESCRIPTION
 
 
 ---
-# Python and R are not yet the right tool for data science
+# Python and R fail to be _the_ solution for data science
 
 
 ### 1. Reproducible: Can we reproduce findings at a later date? ![](fail.png)
 
 ### 2. Rapid Prototyping: Can we quickly do setup an analysis?            ![](check.png)
 
-### 3. Scalable: Can we scale simple protocols into more complex systems? ![](fail.png)
+### 3. Scalable: Can we upscale scripts into systems and tools? ![](fail.png)
 
 ### 4. Learning curve: Can we enable colleagues to analyze data?            ![](fail.png)
-
 
 
 ???
@@ -366,7 +368,7 @@ That's why python does extremly well. Not because it's excellent in all recards.
 
 Polls are biass, but kd-nuggest community poll: Surpassed R in popuarlatiy for data-science.
 
-
+dynamic typing prevents scaling up systems
 
 
 ---
@@ -638,7 +640,7 @@ Usage:
  kscript --self-update
 
 The &lt;script&gt; can be a  script file (*kts), a script URL, - for stdin, a *.kt source file 
-with a main method, or some kotlin code.
+with a main method, or some Kotlin code.
 
 Use '--clear-cache' to wipe cached script jars and urls
 Use '--self-update' to wipe cached script jars and urls
@@ -751,12 +753,16 @@ hello_kscript my argu ments
 
 val stdin: Sequence&lt;String&gt; = generateSequence { readLine() }
 
-stdin.map { "test"+it }
-        .filter{ it.contains("^[0-5]{5}".toRegex()) }
-        .forEach { println(it) }
+stdin
+    // retain only lines starting with digits 0 to 5
+    .filter{ it.contains("^[0-5]{5}".toRegex()) }
+    // add prefix
+    .map { "id" + it }
+    // print to stdout
+    .forEach { println(it) }
 ```
 
-Already a viable alternative to write scripts, but not already better than `kotlinc -script`
+Would work using `kotlinc -script` as interpreter as well, but would be painfully slow because of recompilation on each invocation
 
 ---
 # Cache for speed
@@ -927,7 +933,6 @@ kscript 'lines.map { it.trim() }.print()' file.txt
 
 See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]
 
-
 ---
 # Pimp your REPL with `--interactive`
 
@@ -1068,7 +1073,7 @@ exec $(kotlin -classpath ${jarPath} kscript.app.KscriptKt "$@")
 
 .center[.image-50[.images[![](images/ide_bug.png)]]]
 
-#### Not many. Don't get infected by _featureritis_!
+#### Not much left to do. :-) Don't get infected by _featureritis_!
 
 #### `kscript` is unit- and battle-tested, and ready production!
 
@@ -1095,15 +1100,13 @@ class HelloWorld : View() {
 
 
 
-* &lt;your ideas here!&gt;
+* _&amp;lt;your ideas here!&amp;gt;_ just go to https://github.com/holgerbrandl/kscript
 
 ???
 
 Recently implemented in [kohesive/keplin](https://github.com/kohesive/keplin)**
 and used for `[kotlin-jupyter](https://github.com/ligee/kotlin-jupyter)` kernel, so maybe integrate it from there.
 
-
-???
 
 native requires at least some 'java.io.File'-like native API
 
@@ -1114,16 +1117,33 @@ https://github.com/Kotlin/KEEP/issues/75
 https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 
 ---
-## What's still missing in kotlin to become the next big thing for  in data-science?
+## What's still missing in Kotlin to rule data-science?
 
-1. **Interactivy**: Continue jupyter-kernel support  (interactive usage, but also report rendering using kotlin scripts)
-2. Provide a cut-down version IJ for Kotlin. Newbies are overwhelmed with current builds. Would also help for teaching
-3. Fix the REPL to become truly interactive
-4. Better visualization (dplyr, d3)
-5. More libraries. Just wrap existing JVM libraries!
+1. **Interactivity**: Continue jupyter-kernel support  (interactive usage, but also report rendering using Kotlin scripts)
+2. **More Kotlin DataScience APIs** for modeling ([pandas](http://pandas.pydata.org/), [dplyr](http://dplyr.tidyverse.org/)) and visualization ([ggplot2](http://ggplot2.org/), [seaborn](https://community.modeanalytics.com/python/libraries/seaborn/), [d3](https://d3js.org/))
+
+3. **Fix the REPL** a be not just a `re` wihout `pl`
+
+4. **Data-Science IDE** Provide a _cut down_ version IJ for Kotlin.
+
+
+--
+
+.left-column40[
+![](images/slow_repl.png)
+.image-200[![](images/falling_asleep.gif)]
+]
+
+
+--
+
+.right-column50[
+.image-85[![](images/rstudio.png)]
+]
 
 ???
-long way python and r are miles ahead with the data-sciene libaries.
+
+long way python and r are miles ahead with the data-sciencelibrariess.
 
 ---
 ## Acknowledgements
@@ -1154,6 +1174,8 @@ class: inverse
 ### Kotlin may be the right choice.
 
 ### `kscript` provides enhanced scripting support for Kotlin.
+
+### `kscript` allows to replace scripts written in `ruby`, `python`, `bash`, `r` etc.,
 
 Thanks for your attention.
 
