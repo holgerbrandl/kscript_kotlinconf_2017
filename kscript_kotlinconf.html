@@ -89,7 +89,7 @@ performance left out --&gt; just a linear factor anyway. hard to to a non-biased
 community: analysts / scicntiest not engineers, sometimes even without a phds in computer science. curiopus about data. want to bring them onboard
 
 ---
-# Stick to the basics data-driven science?
+# Stick to the basics for data-driven science?
 
 &gt; But it's faster and way shorter to do it bash! (unknown colleague)
 
@@ -102,6 +102,7 @@ Do _magical_ things in the terminal without dependencies
 removeMultiMappers(){
 perl -ne 'unless((!($_=~/^@.*/)&amp;&amp;!(m/AS:i:/))||(m/AS:i:(\S+).+XS:i:(\S+)/ &amp;&amp; $1-$2&lt;1)){print;}' 
 }
+
 bowtie2 $fastqFile | samtools view -SF 4 -  | removeMultiMappers | samtools sort - result.bam
 ```
 
@@ -113,11 +114,9 @@ bowtie2 $fastqFile | samtools view -SF 4 -  | removeMultiMappers | samtools sort
 
 Get published and forget.
 
-### Fast to write. Impossible to maintain. Not even portable. Does not scale. Unteachable black art.
+### Fast to write. Impossible to maintain or to evolve. Does not scale. Unteachable black art.
 
 ???
-
-Not just one tool, but a zoo that has survived from the 80.
 
 
 `kscript` started of as a `bash` script until it hit a manageabilituy barrier at around ~500 polyglot (i.e. messy) lines.
@@ -306,7 +305,7 @@ https://packaging.python.org/discussions/pip-vs-easy-install/
 ---
 # R dependencies
 
-* No built-in way to indicate a specific version for a project
+* No built-in way to indicate a specific dependency version for a project
 
 * Also declaration of package-depdencies is sloppy by design
 
@@ -341,7 +340,7 @@ from http://127.0.0.1:30576/library/dplyr/DESCRIPTION
 
 ### 3. Scalable: Can we upscale scripts into systems and tools? ![](fail.png)
 
-### 4. Learning curve: Can we enable colleagues to analyze data?            ![](fail.png)
+### 4. Learning curve: Can we enable colleagues to analyze data?            ![](check.png)
 
 
 ???
@@ -765,11 +764,11 @@ stdin
 Would work using `kotlinc -script` as interpreter as well, but would be painfully slow because of recompilation on each invocation
 
 ---
-# Cache for speed
+# Be snappy by caching compiled scripts
 
 `kscript` execution model:
 1. Calculate md5 of input script
-2. Look cached jar by md5
+2. Look cached jar by md5, if not create it
 3. Use process substitution to replace `kscript` with `kotlin` process
 
 All _kscripts_ are cached based on `md5` checksum, so running the same snippet again will be much faster
@@ -858,7 +857,16 @@ Artifacts are the proper way!
 
 But many other languages allow to directly include source files.
 
-`kscript` allows to skip artifact deployment
+
+```kotlin
+//utils.kt
+fun Array&lt;Double&gt;.median(): Double {
+    val (lower, upper) = sorted().let { take(size / 2) to takeLast(size / 2) }
+        return if (size % 2 == 0) (lower.last() + upper.first()) / 2.0 else upper.first()
+}
+```
+`kscript` allows to skip artifact deployment by using `//INCLUDE`
+
 
 ```kotlin
 #!/usr/bin/env kscript
@@ -1126,6 +1134,8 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 
 4. **Data-Science IDE** Provide a _cut down_ version IJ for Kotlin.
 
+???
+
 
 --
 
@@ -1142,6 +1152,8 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 ]
 
 ???
+
+Read–eval–print_loop
 
 long way python and r are miles ahead with the data-sciencelibrariess.
 
