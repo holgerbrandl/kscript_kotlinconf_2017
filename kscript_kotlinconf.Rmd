@@ -652,16 +652,16 @@ Website   : https://github.com/holgerbrandl/kscript
 ```
 
 ---
-# Input modes
+# Input Modes
 
 There's a multitude of ways to serve a script to `kscript`
 
-The `<script>` can be a
+The `<script>` argument can be a
 - script file (*kts),
 - a script URL,
 - `-` for stdin,
-- a `*.kt` source file with a main method,
 - some kotlin code
+- a `*.kt` source file with a main method,
 
 
 ---
@@ -706,7 +706,7 @@ println("Hello Kotlin.")
 ' |  kscript -
 ```
 
-* Use `heredoc` (preferred solution for inlining) which gives more flexibility. E.g. use single quotes in script:
+* Use `heredoc` (preferred solution for inlining) which gives more flexibility. E.g. use single quotes in script
 
 ```bash
 kscript - <<"EOF"
@@ -757,14 +757,14 @@ stdin
     .forEach { println(it) }
 ```
 
-Would work using `kotlinc -script` as interpreter as well, but would be painfully slow because of recompilation on each invocation
+Would work using `kotlinc -script` as interpreter as well, but would be painfully slow
 
 ---
 # Be snappy by caching compiled scripts
 
-`kscript` execution model:
+`kscript` execution model
 1. Calculate md5 of input script
-2. Look cached jar by md5, if not create it
+2. Look up cached jar by md5; if not yet present create it
 3. Use process substitution to replace `kscript` with `kotlin` process
 
 All _kscripts_ are cached based on `md5` checksum, so running the same snippet again will be much faster
@@ -775,12 +775,12 @@ The cache directory is `~/.kscript` and can be cleared with `kscript --clear-cac
 ---
 # Directives
 
-> Script sources are (often) not enough to _... write self-contained mini-applications with Kotlin._ (from kscript GH-README)
+> Script sources are (often) not enough to _... write self-contained mini-applications with Kotlin._ (from kscript README)
 
 Directives supported by `kscript`:
 
 ### `//DEPS` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  Declare dependencies with gradle-style locators
-### `//KOTLIN_OPTS` &nbsp; &nbsp;  Configure the kotlin/java runtime
+### `//KOTLIN_OPTS` &nbsp; &nbsp;  Configure the kotlin/java runtime environment
 ### `//INCLUDE` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Source kotlin files into the script
 ### `//ENTRY` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp;  Declare application entrypoint for kotlin `*.kt` applications
 
@@ -920,7 +920,7 @@ The latter is the default for `kt` files and could be omitted
 ---
 # Replace `awk`ward terminal programming with Kotlin
 
-`kscript` can be used as a speedier and flexible substitute for built-in terminal tools such as `awk` or `sed`
+`kscript` can be used as a speedier and more flexible substitute for built-in terminal tools such as `awk` or `sed`
 
 Use `-t`/`--text` to enable a support-api for line-based text-processing
 
@@ -939,7 +939,7 @@ awk '{sub(/[ \t]*$/, "");print}' file.txt
 kscript -t 'lines.map { it.trim() }.print()' file.txt
 ```
 
-See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]
+See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)
 
 ---
 # Pimp your REPL with `--interactive`
@@ -957,7 +957,7 @@ if (args.size != 1) {
 val records = openFasta(java.io.File(args[0]))
 println(records.count())
 ```
-Bootstrap interactive shell. Example: `CountRecords.kts`
+Bootstrap interactive shell from your script. Example: `CountRecords.kts`
 
 ```bash
 kscript --interactive CountRecords.kts
@@ -966,7 +966,6 @@ kscript --interactive CountRecords.kts
 ```
 Creating REPL from /Users/brandl/Dropbox/kscript_kotlinconf_2017/code_examples/count_records.kts
 Welcome to Kotlin version 1.1.51 (JRE 1.8.0_151-b12)
-import de.mpicbg.scicomp.bioinfo.openFasta
 >>> import de.mpicbg.scicomp.bioinfo.openFasta
 >>> 
 ```
@@ -1093,7 +1092,7 @@ exec $(kotlin -classpath ${jarPath} kscript.app.KscriptKt "$@")
 ---
 # Dream, dream, dream...
 
-* Revise annotation-driven script configuration once Scripting API (KEEP75 + keplin) supports it
+* Revise annotation-driven script configuration once [KEEP75](https://github.com/Kotlin/KEEP/issues/75) Scripting API  supports it
 
 * Use [kohesive/keplin-maven-resolver](https://github.com/kohesive/keplin) for dependency resolution instead of `mvn`
 
@@ -1128,7 +1127,7 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 ---
 ## What's still missing in Kotlin to rule data-science?
 
-1. **Interactivity**: Continue jupyter-kernel support  (interactive usage, but also report rendering using Kotlin scripts)
+1. **Interactivity**: Improve jupyter-kernel support (interactive usage, idea notebook editor support)
 2. **More Kotlin DataScience APIs** for modeling ([pandas](http://pandas.pydata.org/), [dplyr](http://dplyr.tidyverse.org/)) and visualization ([ggplot2](http://ggplot2.org/), [seaborn](https://community.modeanalytics.com/python/libraries/seaborn/), [d3](https://d3js.org/))
 
 3. **Fix the REPL** a be not just a `re` wihout `pl`
@@ -1174,11 +1173,13 @@ class: inverse
 
 --
 
-Thanks for your attention.
 
 Questions and pull requests are welcome.
 
 For these slides, more docs, examples see https://github.com/holgerbrandl/kscript
+
+Thanks for your attention.
+
 
 ???
 Reproducilbe, protoyping, scalable, flat learning curve to build community
