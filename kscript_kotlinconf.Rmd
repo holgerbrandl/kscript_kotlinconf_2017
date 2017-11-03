@@ -990,10 +990,10 @@ evolve a workflow bing up an environment that matches the script
 to give you an example
 
 ---
-# Bootstrap project from scripts with `--idea`
+# Bootstrap projects from scripts with `--idea`
 
 
-* Artifacts and versions will differ between scripts.
+* Artifacts and versions will differ between scripts
 * `kscript` allows to create temporary project from script using Gradle
 
 ```bash
@@ -1021,7 +1021,9 @@ class: inverse, center, middle
 
 walked through all the main features
 
-use the remaining limits to outline future directions of kscript and the use of kotlin as a language for data scicen
+use the remaining minutes to
+* outline future directions of kscript
+* discuss the use of kotlin as a language for data science
 
 ---
 
@@ -1034,6 +1036,7 @@ Using proper file annotations would be better design and also allow for better t
 //vs
 @file:DependsOn("log4j:log4j:1.2.14")
 ```
+--
 
 No such thing as `DependsOn` in kotlin stdlib. To enable correct code parsing add ` com.github.holgerbrandl:kscript-annotations:1.0` as dependency to the Intellij project
 
