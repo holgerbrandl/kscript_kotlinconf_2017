@@ -646,18 +646,17 @@ Use '--self-update' to wipe cached script jars and urls
 
 Options:
  -i --interactive        Create interactive shell with dependencies as declared in script
- --idea                  Open script in temporary Intellij session
  -t --text               Enable stdin support API for more streamlined text processing
+ --idea                  Open script in temporary Intellij session
 
 Copyright : 2017 Holger Brandl
 License   : MIT
-Version   : v2.0.3
+Version   : v2.1.0
 Website   : https://github.com/holgerbrandl/kscript
 ```
 
 ---
-
-## Input modes
+# Input modes
 
 There's a multitude of ways to serve a script to `kscript`
 
@@ -786,7 +785,7 @@ Directives supported by `kscript`:
 
 ### `//DEPS` &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;  Declare dependencies with gradle-style locators
 ### `//KOTLIN_OPTS` &amp;nbsp; &amp;nbsp;  Configure the kotlin/java runtime
-### `//INCLUDE` &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Include/Source kotlin source files
+### `//INCLUDE` &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Source kotlin files into the script
 ### `//ENTRY` &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;  &amp;nbsp; &amp;nbsp; &amp;nbsp;  &amp;nbsp; &amp;nbsp;&amp;nbsp;  Declare application entrypoint for kotlin `*.kt` applications
 
 ???
@@ -923,27 +922,27 @@ The latter is the default for `kt` files and could be omitted
 
 
 ---
-# Ditch awk by using `kscript`s support API
+# Replace `awk`ward terminal programming with Kotlin
 
 `kscript` can be used as a speedier and flexible substitute for built-in terminal tools such as `awk` or `sed`
 
+Use `-t`/`--text` to enable a support-api for line-based text-processing
 
-`awk`-mode: Scripts starting with `lines` enable a support-api for line-based text-processing.
 
-Delete a column
+* Delete a column
 
 
 ```bash
 awk '!($3="")'  some_flights.tsv
-kscript 'lines.split().select(-3).print()' some_flights.tsv 
+kscript -t 'lines.split().select(-3).print()' some_flights.tsv 
 ```
 
 
-Delete trailing white space (spaces, tabs)
+* Delete trailing white space (spaces, tabs)
 
 ```bash
 awk '{sub(/[ \t]*$/, "");print}' file.txt
-kscript 'lines.map { it.trim() }.print()' file.txt
+kscript -t 'lines.map { it.trim() }.print()' file.txt
 ```
 
 See https://github.com/holgerbrandl/kscript-support-api and [kscript as substitute for awk](https://holgerbrandl.github.io/kotlin/2017/05/08/kscript_as_awk_substitute.html)]
@@ -1070,6 +1069,10 @@ Some core aspects are implemented  by `kscript`!
 
 ???
 
+Kotlin Evolution and Enhancement Process
+
+Ilya Chernikov
+
 Will make `kscript` superfluous? Not any time soon given previous speed
 
 Kscript mostly overlaps with https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md#standalone-scripting
@@ -1111,9 +1114,6 @@ class HelloWorld : View() {
     }
 }
 ```
-* Support for java files?
-
-
 
 * _&amp;lt;your ideas here!&amp;gt;_ just go to https://github.com/holgerbrandl/kscript
 
@@ -1164,45 +1164,30 @@ Read–eval–print_loop
 
 long way python and r are miles ahead with the data-sciencelibrariess.
 
----
-## Acknowledgements
-
-
-.left[
-* inspired by [kotlin-script](https://github.com/andrewoma/kotlin-script)
-* Oscar Gonzales
-* Github Community
-
-]
-
-.right[
-* Scientific Computing Facility @ MPI-CBG
-* Scionics Computer Innovation GmbH
-* Jetbrains (Ilya Chernikov,
-]
-
 
 ---
 class: inverse
 
-## Summary
+# Summary
 
 
-### Languages for data-science must allow to share code between prototypes and products, should quick to get started with, and should allow for rapid prototyping
 
-### Kotlin may be the right choice.
+### Kotlin may be the right choice for data science.
 
 ### `kscript` provides enhanced scripting support for Kotlin.
 
-### `kscript` allows to replace scripts written in `ruby`, `python`, `bash`, `r` etc.,
+### `kscript` allows to replace scripts written in `ruby`, `python`, `bash`, `r` etc. with Kotlin
+
+--
 
 Thanks for your attention.
 
-.footnote[
 Questions and pull requests are welcome.
 
-https://github.com/holgerbrandl/kscript
-]
+For these slides, more docs, examples see https://github.com/holgerbrandl/kscript
+
+???
+Reproducilbe, protoyping, scalable, flat learning curve to build community
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
