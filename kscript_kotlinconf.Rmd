@@ -1155,7 +1155,7 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 
 3. **Fix the REPL** to be not just a `re` wihout `pl`
 
-4. **Data-Science IDE** Provide a _cut down_ version IJ for Kotlin.
+4. **Data-Science IDE** Provide a _cut down_ version of IJ for data science
 
 ???
 
