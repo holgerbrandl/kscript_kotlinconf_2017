@@ -1153,7 +1153,7 @@ https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md
 1. **Interactivity**: Improve jupyter-kernel support (interactive usage, idea notebook editor support)
 2. **More Kotlin DataScience APIs** for modeling ([pandas](http://pandas.pydata.org/), [dplyr](http://dplyr.tidyverse.org/)) and visualization ([ggplot2](http://ggplot2.org/), [seaborn](https://community.modeanalytics.com/python/libraries/seaborn/), [d3](https://d3js.org/))
 
-3. **Fix the REPL** a be not just a `re` wihout `pl`
+3. **Fix the REPL** to be not just a `re` wihout `pl`
 
 4. **Data-Science IDE** Provide a _cut down_ version IJ for Kotlin.
 
