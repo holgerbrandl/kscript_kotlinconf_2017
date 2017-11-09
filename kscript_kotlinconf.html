@@ -938,7 +938,7 @@ Use `-t`/`--text` to enable a support API for line-based text processing
 
 ```bash
 awk '!($3="")'  some_flights.tsv
-kscript -t 'lines.split().select(-3).print()' some_flights.tsv 
+kscript -t 'lines.split().selectByName(-3).print()' some_flights.tsv
 ```
 
 
